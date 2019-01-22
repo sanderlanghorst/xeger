@@ -1,2 +1,2 @@
 # Reversed Regex Generator
-Sander Langhorst
+By Sander Langhorst

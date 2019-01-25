@@ -18,13 +18,13 @@
 		<form>
 			<fieldset>
 				<legend>Regex</legend>
-				<label>Insert your Regex <input type="text" placeholder="here"></label>
+				<label>Insert your Regex <input name="regex" class="js-xeger-regex" type="text" placeholder="here"></label>
 
 			</fieldset>
 			<fieldset>
 				<legend>Options</legend>
 				<label>Output size
-					<select>
+					<select name="size" class="js-xeger-size">
 						<option value="1">Small</option>
 						<option value="2">Medium</option>
 						<option value="3">Large</option>
@@ -32,7 +32,7 @@
 					</select>
 				</label>
 				<label>Output diversity
-					<select>
+					<select name="diversity" class="js-xeger-diversity">
 						<option value="1">Simple</option>
 						<option value="2">Random</option>
 						<option value="3">Insane</option>

@@ -89,6 +89,25 @@ function init(elements = document.querySelectorAll(selectors.base)) {
 	initXeger(elements[0]);
 }
 
+/**
+ * renders the result on the page
+ * @param {Array<String>} possibilities the result
+ */
+function setResult(possibilities){
+	const
+		resultElement = baseElement.querySelector(selectors.result),
+		ul = document.createElement('ul');
+	resultElement.innerHTML = "";
+
+	possibilities.forEach(p => {
+		const
+			element = document.createElement('li');
+		element.innerText = p;
+		ul.append(element);
+	});
+	resultElement.append(ul);
+}
+
 /// Events
 
 /**
@@ -106,17 +125,7 @@ function onGenerateClicked(event){
 	
 	console.log(possibilities);
 
-	const
-		resultElement = baseElement.querySelector(selectors.result),
-		ul = document.createElement('ul');
-	resultElement.append(ul);
-
-	possibilities.forEach(p => {
-		const
-			element = document.createElement('li');
-		element.innerText = p;
-		ul.append(element);
-	});
+	setResult(possibilities);
 }
 
 /// Export

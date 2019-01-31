@@ -1,3 +1,4 @@
+
 export const Size = Object.freeze({
 	Small: Symbol('small'),
 	Medium: Symbol('medium'),

@@ -1,2 +1,2 @@
-import {init} from '/js/elements/xeger.js';
+import {init} from './elements/xeger.js';
 init();

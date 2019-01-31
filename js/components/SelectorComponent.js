@@ -1,5 +1,7 @@
 /**
  * Base component SelectorComponent
+ * 
+ * @typedef {Object} SelectorComponent
  */
 
 export default class SelectorComponent{

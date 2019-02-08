@@ -5,7 +5,7 @@
 
 /// Imports
 
-import Parser from '../components/Parser.js';
+import Parser from '../Parser.js';
 import {Size, Diversity} from '../Enums.js';
 
 
@@ -150,7 +150,7 @@ function onGenerateClicked(event){
 	const
 		sizeOption = getSizeOption(),
 		diversityOption = getDiversityOption(),
-		parser = new Parser(regex),
+		parser = new Parser(regex.value),
 		parsedComponent = parser.Parse(),
 		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
 	

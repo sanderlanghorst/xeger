@@ -21,6 +21,10 @@ export default class Character extends SelectorBase {
 		return this._character;
 	}
 
+	/**@inheritdoc */
+	get Components(){
+		return [];
+	}
 
 	/// Methods
 

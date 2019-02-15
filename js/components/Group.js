@@ -1,7 +1,7 @@
 /// Imports
 
 import SelectorBase from './SelectorBase.js';
-import permute from './Permutator.js';
+import permute from './utils/Permutator.js';
 
 /// Private methods
 
@@ -18,6 +18,9 @@ export default class Group extends SelectorBase {
 
 	/// Properties
 
+	/**
+	 * @inheritdoc
+	 */
 	get Components(){
 		return this._components;
 	}
@@ -25,6 +28,7 @@ export default class Group extends SelectorBase {
 	/// Methods
 
 	/**
+	 * @inheritdoc
 	 * adds a component to the group
 	 * @param {SelectorBase} component the new component
 	 */

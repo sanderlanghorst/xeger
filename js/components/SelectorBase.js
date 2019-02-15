@@ -6,6 +6,16 @@
 
 export default class SelectorBase {
 	
+	/// Properties
+
+	/**
+	 * Gets the components of the element
+	 * @returns {Array<SelectorBase>}
+	 */
+	get Components(){
+		throw "Cannot call abstract method";
+	}
+
 	/// Methods
 
 	/**

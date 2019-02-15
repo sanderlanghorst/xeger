@@ -9,6 +9,7 @@ import Character from './components/Character.js';
 import Dot from './components/Dot.js';
 import Group from './components/Group.js';
 import SelectorBase from './components/SelectorBase.js';
+import Or from './components/Or.js';
 
 
 /// Private type
@@ -69,7 +70,7 @@ function parse(result) {
 			char = consume(result);
 
 		switch(char){
-			case '(':
+			case '(':{
 				//new group
 				const
 					g = new Group();
@@ -79,13 +80,26 @@ function parse(result) {
 				result.Rest = r.Rest;
 				result.Component.AddComponent(r.Component);
 				break;
+			}
 
 			case ')':
 				//close group
 				return;
-			case '|':
-				break;
 
+			case '|': {
+				const
+					or = new Or(),
+					right = new Group();
+				or.AddComponent(result.Component);
+				result.Component = or;
+				let
+					r = new ParseResult(result.Rest, right);
+				parse(r);
+				result.Rest = r.Rest;
+				or.AddComponent(r.Component);
+				return;
+			}
+			
 			case '.':
 				result.Component.AddComponent(new Dot());
 				break;

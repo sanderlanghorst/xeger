@@ -77,6 +77,13 @@ export default class Dot extends SelectorBase {
 		super();
 	}
 
+	/// Properties
+	
+	/**@inheritdoc */
+	get Components(){
+		return [];
+	}
+
 	/// Methods
 
 	/**

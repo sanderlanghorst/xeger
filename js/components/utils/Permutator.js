@@ -13,6 +13,8 @@ function innerPermute(pre, list){
 		return [pre];
 
 	const perlist = list[0];
+	if(perlist.length == 0)
+		perlist.push('');
 	perlist.forEach((value) => {
 		result.push(innerPermute(pre + value, list.slice(1, list.length)));
 	});

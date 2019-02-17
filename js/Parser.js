@@ -10,6 +10,7 @@ import Dot from './components/Dot.js';
 import Group from './components/Group.js';
 import SelectorBase from './components/SelectorBase.js';
 import Or from './components/Or.js';
+import Quantifier from './components/Quantifier.js';
 
 
 /// Private type
@@ -99,10 +100,37 @@ function parse(result) {
 				or.AddComponent(r.Component);
 				return;
 			}
-			
+
 			case '.':
 				result.Component.AddComponent(new Dot());
 				break;
+
+			case '*':{
+				const
+					q = new Quantifier(0, 100),
+					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
+				q.AddComponent(e);
+				result.Component.AddComponent(q);
+				break;
+			}
+			
+			case '+':{
+				const
+					q = new Quantifier(1, 100),
+					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
+				q.AddComponent(e);
+				result.Component.AddComponent(q);
+				break;
+			}
+
+			case '?':{
+				const
+					q = new Quantifier(0, 1),
+					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
+				q.AddComponent(e);
+				result.Component.AddComponent(q);
+				break;
+			}
 
 			default:
 				//else a single character

@@ -13,7 +13,7 @@ function pick(list, number){
 		s = list.length / number,
 		result = [];
 	for(let i =0; i < number; i++){
-		c += Math.round(Math.random(0, 1) * s);
+		c += Math.floor(Math.random() * s);
 		result.push(list[c]);
 	}
 	return result;

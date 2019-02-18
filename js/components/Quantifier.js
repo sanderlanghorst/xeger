@@ -3,7 +3,21 @@
 import SelectorBase from './SelectorBase.js';
 import {pick, range} from './utils/Range.js';
 import { Size, Diversity } from '../Enums.js';
-import permute from './utils/Permutator.js';
+
+/// Privates
+
+const
+	diversityNumbers = {
+		[Diversity.Simple] : 3,
+		[Diversity.Random] : 6,
+		[Diversity.Insane] : 20
+	},
+	sizeNumbers = {
+		[Size.Small]: 3,
+		[Size.Medium]: 6,
+		[Size.Large]: 12,
+		[Size.Insane]: 0
+	}
 
 /// Class
 
@@ -55,41 +69,13 @@ export default class Quantifier extends SelectorBase {
 	 */
 	GetSelection(size, diversity){
 		let
-			pickNumber = 1,
-			sizeNumber = 1;
-		switch(diversity){
-			case Diversity.Simple:
-				pickNumber = 3;
-				break;
-
-			case Diversity.Random:
-				pickNumber = 6;
-				break;
-
-			case Diversity.Insane:
-				pickNumber = 12;
-				break;
-		}
-		switch(size){
-			case Size.Small:
-				sizeNumber = 3;
-				break;
-
-			case Size.Medium:
-				sizeNumber = 6;
-				break;
-
-			case Size.Large:
-				sizeNumber = 12;
-				break;
-
-			case Size.Insane:
-				sizeNumber = this._max;
-				break;
+			pickNumber = diversityNumbers[diversity],
+			sizeNumber = sizeNumbers[size];
+		
+		if(size === Size.Insane){
+			sizeNumber = this._max;
 		}
 
-
-		//TODO:fix just selection
 		let
 			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max)+1) - this._min),
 									pickNumber),

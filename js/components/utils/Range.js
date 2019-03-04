@@ -12,8 +12,8 @@ function pick(list, number){
 		c = 0,
 		s = list.length / number,
 		result = [];
-	for(let i =0; i < number; i++){
-		c += Math.floor(Math.random() * s);
+	for(let i = 0; i < number; i++){
+		c += Math.floor(Math.random() * s) + 1;
 		result.push(list[c]);
 	}
 	return result;

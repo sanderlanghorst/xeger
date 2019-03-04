@@ -81,9 +81,8 @@ export default class Quantifier extends SelectorBase {
 									pickNumber),
 			resultSets = numberOfResults		
 						.map(i => range(1, i)
-									.map(_ => pick(this._component.GetSelection(size, diversity), 1)
+									.flatMap(_ => pick(this._component.GetSelection(size, diversity), 1)
 									)
-									.flatMap(m => m)
 									.join(''));
 		return resultSets;
 	}

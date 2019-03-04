@@ -5,8 +5,7 @@
 /// Imports
 
 
-import Character from './components/Character.js';
-import Dot from './components/Dot.js';
+import CharacterSet from './components/CharacterSet.js';
 import Group from './components/Group.js';
 import SelectorBase from './components/SelectorBase.js';
 import Or from './components/Or.js';
@@ -102,7 +101,7 @@ function parse(result) {
 			}
 
 			case '.':
-				result.Component.AddComponent(new Dot());
+				result.Component.AddComponent(CharacterSet.FromRange(0,255));
 				break;
 
 			case '*':{
@@ -134,7 +133,7 @@ function parse(result) {
 
 			default:
 				//else a single character
-				result.Component.AddComponent(new Character(char));
+				result.Component.AddComponent(CharacterSet.FromCharacter(char));
 				break;
 		}
 	}

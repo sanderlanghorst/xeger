@@ -3,9 +3,9 @@
 
 ## main selectors
 - [x] `.` alles behalve newline
-- [ ] `[abc]` lijst van karakters
-- [ ] `[a-z]` bereik van karakters
-- [ ] `[^a-z]` alles behalve bereik van karakters
+- [x] `[abc]` lijst van karakters
+- [x] `[a-z]` bereik van karakters
+- [x] `[^a-z]` alles behalve bereik van karakters
 - [ ] `^` begin
 - [ ] `$` eind
 - [x] `|` of

@@ -10,6 +10,7 @@ import Group from './components/Group.js';
 import SelectorBase from './components/SelectorBase.js';
 import Or from './components/Or.js';
 import Quantifier from './components/Quantifier.js';
+import { range } from './components/utils/Range.js';
 
 
 /// Private type
@@ -56,16 +57,63 @@ class ParseResult {
 function consume(result) {
 	const
 		c = result.Rest.charAt(0);
-	result.Rest = result.Rest.slice(1,result.Rest.length);
+	result.Rest = result.Rest.slice(1, result.Rest.length);
 	return c;
+}
+
+/**
+ * parses the character set
+ * @param {ParseResult} result the current parsed result
+ */
+function ParseSet(result){
+	const 
+		negate = result.Rest.charAt(0) === '^',
+		/**@type {Array<Number>} */
+		sets = [];
+	let
+		rangeFrom = NaN,
+		rangeSet = false;
+		
+	if(negate)
+		consume(result);
+
+	while(result.Rest.length) {
+		const
+			char = consume(result);
+		
+		switch(char){
+			case '-':
+				rangeSet = true;
+				break;
+
+			case ']':
+				result.Component.AddComponent(negate 
+									? CharacterSet.FromNegate(sets)
+									: new CharacterSet(sets));
+				return;
+			
+			default:
+				if(rangeSet) {
+					range(rangeFrom, char.charCodeAt(0) - rangeFrom)
+						.forEach(i => sets.push(i));
+				} else {
+					rangeFrom = char.charCodeAt(0);
+					sets.push(rangeFrom);
+				}
+				rangeSet = false;
+				
+				break;
+		}
+
+	}
 }
 
 /**
  * parses the input
  * @param {ParseResult} result the current parsed result
  */
-function parse(result) {
-	while(result.Rest.length > 0) {
+function ParseGroup(result) {
+	while(result.Rest.length) {
 		const 
 			char = consume(result);
 
@@ -76,7 +124,7 @@ function parse(result) {
 					g = new Group();
 				let
 					r = new ParseResult(result.Rest, g);
-				parse(r);
+				ParseGroup(r);
 				result.Rest = r.Rest;
 				result.Component.AddComponent(r.Component);
 				break;
@@ -85,6 +133,11 @@ function parse(result) {
 			case ')':
 				//close group
 				return;
+			
+			case '[':
+				//character set
+				ParseSet(result);
+				break;
 
 			case '|': {
 				const
@@ -94,7 +147,7 @@ function parse(result) {
 				result.Component = or;
 				let
 					r = new ParseResult(result.Rest, right);
-				parse(r);
+				ParseGroup(r);
 				result.Rest = r.Rest;
 				or.AddComponent(r.Component);
 				return;
@@ -158,7 +211,7 @@ export default class Parser {
 		const 
 			defaultComponent = new Group(),
 			result = new ParseResult(this._regex, defaultComponent);
-		parse(result);
+		ParseGroup(result);
 		console.log(result);
 		return result.Component;
 	}

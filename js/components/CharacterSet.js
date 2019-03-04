@@ -70,6 +70,14 @@ export default class CharacterSet extends SelectorBase {
 	}
 
 	/**
+	 * gets a characters set based on the predefined sets without this set
+	 * @param {Array<Number>} set a negated character set
+	 */
+	static FromNegate(set){
+		return new CharacterSet(predefinedSets[Diversity.Random].filter(p => !set.some(s => s === p)));
+	}
+
+	/**
 	 * set a range
 	 * @param {Number} from charcode
 	 * @param {Number} to charcode

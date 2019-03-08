@@ -17,6 +17,8 @@ import { range } from './components/utils/Range.js';
 
 class ParseResult {
 
+	///Constructor
+
 	/**
 	 * Instanciates a ParseResult
 	 * @param {String} rest the string to be parsed
@@ -26,6 +28,8 @@ class ParseResult {
 		this._rest = rest;
 		this._component = currentComponent;
 	}
+
+	/// Properties
 
 	get Rest(){
 		return this._rest;
@@ -45,6 +49,16 @@ class ParseResult {
 	set Component(value){
 		this._component = value;
 	}
+	
+	///Methods
+
+	/**
+	 * adds a component to the result
+	 * @param {SelectorBase} component the new component
+	 */
+	AddComponent(component) {
+		this.Component.AddComponent(component);
+	}
 }
 
 /// Private methods
@@ -59,53 +73,6 @@ function consume(result) {
 		c = result.Rest.charAt(0);
 	result.Rest = result.Rest.slice(1, result.Rest.length);
 	return c;
-}
-
-/**
- * parses the character set
- * @param {ParseResult} result the current parsed result
- */
-function ParseSet(result){
-	const 
-		negate = result.Rest.charAt(0) === '^',
-		/**@type {Array<Number>} */
-		sets = [];
-	let
-		rangeFrom = NaN,
-		rangeSet = false;
-		
-	if(negate)
-		consume(result);
-
-	while(result.Rest.length) {
-		const
-			char = consume(result);
-		
-		switch(char){
-			case '-':
-				rangeSet = true;
-				break;
-
-			case ']':
-				result.Component.AddComponent(negate 
-									? CharacterSet.FromNegate(sets)
-									: new CharacterSet(sets));
-				return;
-			
-			default:
-				if(rangeSet) {
-					range(rangeFrom, char.charCodeAt(0) - rangeFrom)
-						.forEach(i => sets.push(i));
-				} else {
-					rangeFrom = char.charCodeAt(0);
-					sets.push(rangeFrom);
-				}
-				rangeSet = false;
-				
-				break;
-		}
-
-	}
 }
 
 /**
@@ -126,7 +93,7 @@ function ParseGroup(result) {
 					r = new ParseResult(result.Rest, g);
 				ParseGroup(r);
 				result.Rest = r.Rest;
-				result.Component.AddComponent(r.Component);
+				result.AddComponent(r.Component);
 				break;
 			}
 
@@ -154,7 +121,7 @@ function ParseGroup(result) {
 			}
 
 			case '.':
-				result.Component.AddComponent(CharacterSet.FromRange(0,255));
+				result.AddComponent(CharacterSet.FromRange(0,255));
 				break;
 
 			case '*':{
@@ -162,7 +129,7 @@ function ParseGroup(result) {
 					q = new Quantifier(0, 100),
 					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
 				q.AddComponent(e);
-				result.Component.AddComponent(q);
+				result.AddComponent(q);
 				break;
 			}
 			
@@ -171,7 +138,7 @@ function ParseGroup(result) {
 					q = new Quantifier(1, 100),
 					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
 				q.AddComponent(e);
-				result.Component.AddComponent(q);
+				result.AddComponent(q);
 				break;
 			}
 
@@ -180,15 +147,62 @@ function ParseGroup(result) {
 					q = new Quantifier(0, 1),
 					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
 				q.AddComponent(e);
-				result.Component.AddComponent(q);
+				result.AddComponent(q);
 				break;
 			}
 
 			default:
 				//else a single character
-				result.Component.AddComponent(CharacterSet.FromCharacter(char));
+				result.AddComponent(CharacterSet.FromCharacter(char));
 				break;
 		}
+	}
+}
+
+/**
+ * parses the character set
+ * @param {ParseResult} result the current parsed result
+ */
+function ParseSet(result){
+	const 
+		negate = result.Rest.charAt(0) === '^',
+		/**@type {Array<Number>} */
+		sets = [];
+	let
+		rangeFrom = NaN,
+		rangeSet = false;
+
+	if(negate)
+		consume(result);
+
+	while(result.Rest.length) {
+		const
+			char = consume(result);
+		
+		switch(char){
+			case '-':
+				rangeSet = true;
+				break;
+
+			case ']':
+				result.AddComponent(negate 
+									? CharacterSet.FromNegate(sets)
+									: new CharacterSet(sets));
+				return;
+			
+			default:
+				if(rangeSet) {
+					range(rangeFrom, char.charCodeAt(0) - rangeFrom)
+						.forEach(i => sets.push(i));
+					sets.push(char.charCodeAt(0));
+				} else {
+					rangeFrom = char.charCodeAt(0);
+				}
+				rangeSet = false;
+				
+				break;
+		}
+
 	}
 }
 

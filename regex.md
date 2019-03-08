@@ -14,9 +14,9 @@
 - [x] `+` 1 of meer
 - [ ] `*? +?` lazy
 - [x] `()` groep
-- [ ] `{n}` n keer
-- [ ] `{n,}` minstens n keer
-- [ ] `{n,m}` n tot m keer
+- [x] `{n}` n keer
+- [x] `{n,}` minstens n keer
+- [x] `{n,m}` n tot m keer
 - [ ] `\` escaped character
 
 ## special characters:

@@ -59,6 +59,16 @@ class ParseResult {
 	AddComponent(component) {
 		this.Component.AddComponent(component);
 	}
+
+	/**
+	 * Add a quantifier to the last component
+	 * @param {Quantifier} quantifier the quantifier to apply on the last component
+	 */
+	AddQuantifier(quantifier) {
+		const e = this.Component.Components.splice(this.Component.Components.length - 1, 1)[0];
+		quantifier.AddComponent(e);
+		this.AddComponent(quantifier);
+	}
 }
 
 /// Private methods
@@ -125,29 +135,21 @@ function ParseGroup(result) {
 				break;
 
 			case '*':{
-				const
-					q = new Quantifier(0, 100),
-					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
-				q.AddComponent(e);
-				result.AddComponent(q);
+				result.AddQuantifier(new Quantifier(0, 100));
 				break;
 			}
 			
 			case '+':{
-				const
-					q = new Quantifier(1, 100),
-					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
-				q.AddComponent(e);
-				result.AddComponent(q);
+				result.AddQuantifier(new Quantifier(1, 100));
 				break;
 			}
 
 			case '?':{
-				const
-					q = new Quantifier(0, 1),
-					e = result.Component.Components.splice(result.Component.Components.length - 1, 1)[0];
-				q.AddComponent(e);
-				result.AddComponent(q);
+				result.AddQuantifier(new Quantifier(0, 1));
+				break;
+			}
+			case '{':{
+				ParseQuantifier(result);
 				break;
 			}
 
@@ -203,6 +205,59 @@ function ParseSet(result){
 				break;
 		}
 
+	}
+}
+
+/**
+ * parses the quantifier
+ * @param {ParseResult} result The current parsed result
+ */
+function ParseQuantifier(result) {
+	let
+		fromSet = false,
+		rangeFrom = '',
+		rangeTo = '';
+	const quantifierResult = new ParseResult(result.Rest, result.Component);
+
+	while(quantifierResult.Rest.length) {
+		const
+			char = consume(quantifierResult);
+		switch(char){
+			case ',':
+				fromSet = true;
+				break;
+
+			case '}':
+				const fromInt = parseInt(rangeFrom, 10);
+				/**@type {Quantifier} */
+				let q;
+				//quantifier: single, range endless, range
+				if(!fromSet) {
+					q = new Quantifier(fromInt, fromInt);
+				} else if(rangeTo === '') {
+					//if the range from is already high, only add a bit
+					q = new Quantifier(fromInt, fromInt > 100 ? fromInt + 10 : 100);
+				} else {
+					const toInt = parseInt(rangeTo, 10);
+					q = new Quantifier(fromInt, toInt);
+				}
+				quantifierResult.AddQuantifier(q);
+				result.Rest = quantifierResult.Rest;
+				result.Component = quantifierResult.Component;
+				return;
+			
+			default:
+				if(!char.match(/\d/)) { //not a range
+					result.AddComponent(CharacterSet.FromCharacter('{'));
+					return;
+				}
+				if(!fromSet) {
+					rangeFrom = rangeFrom.concat(char);
+				} else {
+					rangeTo = rangeTo.concat(char);
+				}
+				break;
+		}
 	}
 }
 

@@ -171,7 +171,7 @@ function ParseSet(result){
 		/**@type {Array<Number>} */
 		sets = [];
 	let
-		rangeFrom = NaN,
+		rangeFrom = null,
 		rangeSet = false;
 
 	if(negate)
@@ -187,6 +187,9 @@ function ParseSet(result){
 				break;
 
 			case ']':
+				if(rangeFrom !== null)
+					sets.push(rangeFrom);
+
 				result.AddComponent(negate 
 									? CharacterSet.FromNegate(sets)
 									: new CharacterSet(sets));
@@ -197,7 +200,10 @@ function ParseSet(result){
 					range(rangeFrom, char.charCodeAt(0) - rangeFrom)
 						.forEach(i => sets.push(i));
 					sets.push(char.charCodeAt(0));
+					rangeFrom = null;
 				} else {
+					if(rangeFrom !== null)
+						sets.push(rangeFrom);
 					rangeFrom = char.charCodeAt(0);
 				}
 				rangeSet = false;

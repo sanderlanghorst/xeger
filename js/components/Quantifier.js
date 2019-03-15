@@ -3,6 +3,7 @@
 import SelectorBase from './SelectorBase.js';
 import {pick, range} from './utils/Range.js';
 import { Size, Diversity } from '../Enums.js';
+import permute from './utils/Permutator.js';
 
 /// Privates
 
@@ -68,22 +69,23 @@ export default class Quantifier extends SelectorBase {
 	 * @returns {Array<String>} The array
 	 */
 	GetSelection(size, diversity){
+		const
+			pickNumber = diversityNumbers[diversity];
 		let
-			pickNumber = diversityNumbers[diversity],
 			sizeNumber = sizeNumbers[size];
 		
 		if(size === Size.Insane){
 			sizeNumber = this._max;
 		}
 
-		let
-			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max)+1) - this._min),
+		const
+			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max - this._min)+1)),
 									pickNumber),
-			resultSets = numberOfResults		
+			results = numberOfResults		
 						.map(i => range(1, i)
-									.flatMap(_ => pick(this._component.GetSelection(size, diversity), 1)
-									)
-									.join(''));
+									.map(_ => pick(this._component.GetSelection(size, diversity), 1)
+									)),
+			resultSets = results.flatMap(r => permute(r));
 		return resultSets;
 	}
 }

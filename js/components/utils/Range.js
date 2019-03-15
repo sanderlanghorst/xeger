@@ -12,17 +12,23 @@ function pick(list, number){
 		c = 0,
 		s = list.length / number,
 		result = [];
-	for(let i = 0; i < number; i++){
-		c += Math.floor(Math.random() * s) + 1;
-		result.push(list[c]);
+	if(number > 2) {
+		result.push(list[0]);
+		result.push(list[list.length - 1]);
 	}
-	return result;
+	while(result.length < number){
+		let rand = Math.floor(Math.random() * list.length);
+		if(!result.some(r => r === list[rand])) {
+			result.push(list[rand]);
+		}
+	}
+	return result.sort();
 }
 
 /**
  * Creates an array with integers from start with a number of numbers
  * @param {Number} start the first number
- * @param {Number} number the last number
+ * @param {Number} number the number of elements
  */
 function range(start, number) {
 	return Array(number).fill().map((_, idx) => start + idx)

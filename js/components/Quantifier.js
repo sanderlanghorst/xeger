@@ -79,13 +79,13 @@ export default class Quantifier extends SelectorBase {
 		}
 
 		const
-			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max - this._min)+1)),
+			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max - this._min) + 1)),
 									pickNumber),
-			results = numberOfResults		
+			results = numberOfResults
 						.map(i => range(1, i)
-									.map(_ => pick(this._component.GetSelection(size, diversity), 1)
+									.map(_ => this._component.GetSelection(size, diversity)
 									)),
-			resultSets = results.flatMap(r => permute(r));
+			resultSets = results.flatMap(r => permute(r, size));
 		return resultSets;
 	}
 }

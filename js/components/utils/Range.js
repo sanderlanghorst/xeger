@@ -22,7 +22,7 @@ function pick(list, number){
 			result.push(list[rand]);
 		}
 	}
-	return result.sort();
+	return result.sort((a,b) => a-b);
 }
 
 /**

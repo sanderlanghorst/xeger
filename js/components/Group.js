@@ -45,7 +45,7 @@ export default class Group extends SelectorBase {
 	GetSelection(size, diversity){
 		const
 			selection = this._components.map(c => c.GetSelection(size, diversity)),
-			result = permute(selection);
+			result = permute(selection, size);
 		return result;
 	}
 }

@@ -14,8 +14,8 @@ const
 	moduleName = 'xeger',
 	selectors = {
 		base: `.js-${moduleName}`,
-		button: `.js-${moduleName}-generate`,
 		diversity: `.js-${moduleName}-diversity`,
+		form: `form`,
 		regex: `.js-${moduleName}-regex`,
 		result: `.js-${moduleName}-result`,
 		size: `.js-${moduleName}-size`
@@ -72,12 +72,12 @@ function initXeger(element){
 	baseElement = element;
 
 	const 
-		button = baseElement.querySelector(selectors.button),
+		form = baseElement.querySelector(selectors.form),
 		regex = baseElement.querySelector(selectors.regex);
-	if(button === null)
+	if(form === null)
 		return;
 
-	button.addEventListener('click', onGenerateClicked);
+	form.addEventListener('submit', onFormSubmitted);
 	regex.addEventListener('input', onRegexInputed);
 }
 
@@ -139,10 +139,12 @@ function validateInput(regex){
  * handles the generate button click
  * @param {MouseEvent} event the mouse event
  */
-function onGenerateClicked(event){
+function onFormSubmitted(event){
 	const
 		regex = baseElement.querySelector(selectors.regex);
 	
+	event.preventDefault();
+
 	if(!validateInput(regex)){
 		return;
 	}

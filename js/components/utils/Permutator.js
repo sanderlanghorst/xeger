@@ -55,9 +55,12 @@ export default function permute(list, size) {
 		innerList = [],
 		totalDimention = list.reduce((sum, value) => sum * value.length, 1),
 		entropy = Math.ceil(Math.log2(totalDimention) / Math.log2(list.length));
-		
-	for (let i = 0; i < list.length; i++) {
-		innerList.push(pick(list[i], entropy));
+	
+	if (list.length > 1 && entropy > 1) {
+		for (let i = 0; i < list.length; i++) {
+			innerList.push(pick(list[i], entropy));
+		}
+		return pick(innerPermute('', innerList), sizeNumbers[size]);
 	}
-	return pick(innerPermute('', innerList), sizeNumbers[size]);
+	return innerPermute('', list);
 }

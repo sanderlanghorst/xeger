@@ -17,7 +17,7 @@
 - [x] `{n}` n keer
 - [x] `{n,}` minstens n keer
 - [x] `{n,m}` n tot m keer
-- [ ] `\` escaped character
+- [x] `\` escaped character
 
 ## special characters:
 ### Shorthands

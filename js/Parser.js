@@ -95,6 +95,20 @@ function peek(result) {
 }
 
 /**
+ * parses the escaped character
+ * @param {ParseResult} result the current parsed result
+ */
+function ParseEscaped(result) {
+	const
+		char = consume(result);
+	switch(char) {
+		//shorthands
+		default:
+			result.AddComponent(CharacterSet.FromCharacter(char));
+	}
+}
+
+/**
  * parses the input
  * @param {ParseResult} result the current parsed result
  */
@@ -157,6 +171,10 @@ function ParseGroup(result) {
 			
 			case '{':
 				ParseQuantifierRange(result);
+				break;
+			
+			case '\\':
+				ParseEscaped(result);
 				break;
 
 			default:

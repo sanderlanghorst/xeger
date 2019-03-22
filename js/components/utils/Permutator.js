@@ -4,11 +4,19 @@ import { Size } from '../../Enums.js';
 import { pick } from './Range.js';
 
 
-const sizeNumbers = {
-	[Size.Small]: 3,
-	[Size.Medium]: 6,
-	[Size.Large]: 12,
-	[Size.Insane]: 100
+const sizes = {
+	addPick: {
+		[Size.Small]: 0,
+		[Size.Medium]: 1,
+		[Size.Large]: 2,
+		[Size.Insane]: 4
+	},
+	totalSize: {
+		[Size.Small]: 3,
+		[Size.Medium]: 6,
+		[Size.Large]: 12,
+		[Size.Insane]: 100
+	}
 }
 
 /// Privat Methods
@@ -53,14 +61,12 @@ export default function permute(list, size) {
 
 	const 
 		innerList = [],
-		totalDimention = list.reduce((sum, value) => sum * value.length, 1),
-		entropy = Math.ceil(Math.log2(totalDimention) / Math.log2(list.length));
-	
-	if (list.length > 1 && entropy > 1) {
-		for (let i = 0; i < list.length; i++) {
-			innerList.push(pick(list[i], entropy));
-		}
-		return pick(innerPermute('', innerList), sizeNumbers[size]);
+		totalDimention = list.reduce((sum, value) => sum + value.length, 0),
+		entropy = Math.ceil(totalDimention / list.length / list.length);
+
+	for (let i = 0; i < list.length; i++) {
+		innerList.push(pick(list[i], entropy + sizes.addPick[size]));
 	}
-	return innerPermute('', list);
+
+	return pick(innerPermute('', innerList), sizes.totalSize[size]);
 }

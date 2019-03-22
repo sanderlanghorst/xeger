@@ -40,6 +40,13 @@ export default class CharacterSet extends SelectorBase {
 		return [];
 	}
 
+	/**
+	 * Gets a copy of the set
+	 */
+	get Set() {
+		return this._set.slice();
+	}
+
 	/// Methods
 
 	/**
@@ -84,6 +91,14 @@ export default class CharacterSet extends SelectorBase {
 	 */
 	static FromRange(from, to){
 		return new CharacterSet(range(from, to-from));
+	}
+
+	/**
+	 * Gets the digit set
+	 * @returns {Array<Number>} the numbers of the digits
+	 */
+	static get DigitSet() {
+		return ((f, t) => range(f, t - f + 1))('0'.charCodeAt(0), '9'.charCodeAt(0));
 	}
 
 }

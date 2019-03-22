@@ -97,14 +97,18 @@ function peek(result) {
 /**
  * parses the escaped character
  * @param {ParseResult} result the current parsed result
+ * @param {CharacterSet} the escaped set
  */
 function ParseEscaped(result) {
 	const
 		char = consume(result);
 	switch(char) {
 		//shorthands
+		case 'd':
+			return new CharacterSet(CharacterSet.DigitSet);
+			
 		default:
-			result.AddComponent(CharacterSet.FromCharacter(char));
+			return CharacterSet.FromCharacter(char);
 	}
 }
 
@@ -174,7 +178,7 @@ function ParseGroup(result) {
 				break;
 			
 			case '\\':
-				ParseEscaped(result);
+				result.AddComponent(ParseEscaped(result));
 				break;
 
 			default:
@@ -219,6 +223,12 @@ function ParseSet(result){
 									: new CharacterSet(sets));
 				return;
 			
+			case '\\': {
+				const escapedSet = ParseEscaped(result);
+				escapedSet.Set.forEach(i => sets.push(i));
+				break;
+			}
+
 			default:
 				if(rangeSet) {
 					range(rangeFrom, char.charCodeAt(0) - rangeFrom)

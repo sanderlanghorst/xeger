@@ -12,7 +12,7 @@
 - [x] `?` 0 of 1 keer
 - [x] `*` 0 of meer
 - [x] `+` 1 of meer
-- [ ] `*? +?` lazy
+- [x] `?? *? +? {n}? {n,m}?` lazy
 - [x] `()` groep
 - [x] `{n}` n keer
 - [x] `{n,}` minstens n keer

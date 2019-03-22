@@ -88,4 +88,11 @@ export default class Quantifier extends SelectorBase {
 			resultSets = results.flatMap(r => permute(r, size));
 		return resultSets;
 	}
+
+	/**
+	 * Makes the selector lazy
+	 */
+	MakeLazy() {
+		this._max = Math.min(this._min + 1, this._max);
+	}
 }

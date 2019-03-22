@@ -86,6 +86,15 @@ function consume(result) {
 }
 
 /**
+ * Gets the next character to parse
+ * @param {ParseResult} result the result
+ * @returns {String} the next character
+ */
+function peek(result) {
+	return result.Rest.charAt(0);
+}
+
+/**
  * parses the input
  * @param {ParseResult} result the current parsed result
  */
@@ -134,24 +143,21 @@ function ParseGroup(result) {
 				result.AddComponent(CharacterSet.FromRange(0,255));
 				break;
 
-			case '*':{
-				result.AddQuantifier(new Quantifier(0, 100));
+			case '*': 
+				ParseQuantifier(result, 0, 100);
 				break;
-			}
 			
-			case '+':{
-				result.AddQuantifier(new Quantifier(1, 100));
+			case '+':
+				ParseQuantifier(result, 1, 100);
 				break;
-			}
 
-			case '?':{
-				result.AddQuantifier(new Quantifier(0, 1));
+			case '?':
+				ParseQuantifier(result, 0, 1);
 				break;
-			}
-			case '{':{
-				ParseQuantifier(result);
+			
+			case '{':
+				ParseQuantifierRange(result);
 				break;
-			}
 
 			default:
 				//else a single character
@@ -167,7 +173,7 @@ function ParseGroup(result) {
  */
 function ParseSet(result){
 	const 
-		negate = result.Rest.charAt(0) === '^',
+		negate = peek(result) === '^',
 		/**@type {Array<Number>} */
 		sets = [];
 	let
@@ -215,10 +221,23 @@ function ParseSet(result){
 }
 
 /**
+ * Parse a full quantifier
+ * @param {ParseResult} result the result to be parsed
+ * @param {Number} min the minimum
+ * @param {Number} max the maxium
+ */
+function ParseQuantifier(result, min, max) {
+	const
+		q = new Quantifier(min, max);
+	result.AddQuantifier(q);
+	ParseQuantifierLazy(result, q);
+}
+
+/**
  * parses the quantifier
  * @param {ParseResult} result The current parsed result
  */
-function ParseQuantifier(result) {
+function ParseQuantifierRange(result) {
 	let
 		fromSet = false,
 		rangeFrom = '',
@@ -248,8 +267,10 @@ function ParseQuantifier(result) {
 					q = new Quantifier(fromInt, toInt);
 				}
 				quantifierResult.AddQuantifier(q);
+				ParseQuantifierLazy(quantifierResult, q);
 				result.Rest = quantifierResult.Rest;
 				result.Component = quantifierResult.Component;
+				
 				return;
 			
 			default:
@@ -264,6 +285,18 @@ function ParseQuantifier(result) {
 				}
 				break;
 		}
+	}
+}
+
+/**
+ * parses the quantifier
+ * @param {ParseResult} result The current parsed result
+ * @param {Quantifier} quantifier The quantifier result
+ */
+function ParseQuantifierLazy(result, quantifier) {
+	if(peek(result) === '?') {
+		consume(result);
+		quantifier.MakeLazy();
 	}
 }
 

@@ -6,11 +6,24 @@ By Sander Langhorst
 There are a lot of regular expression websites, but not many give input examples based on regular expressions.
 
 ### Work in progress
-See my work in progress in this document:
+This project is still work in progress.
+Global progress:
+- [x] setup
+- [ ] implement regex rules
+	- [x] basics
+	- [ ] shorthands
+	- [ ] references
+- [ ] implement unit testing
+- [ ] convert to usable module
+- [ ] implement npm packaging
+- [ ] use background worker to prevent ui freeze
+- [ ] load results as they get calculated
 
-[Progress](./regex.md)
+See detailed progress in this document:
+
+[Regex Progress](./regex.md)
 
 ### This project is just HTML and javascript (and a touch of css)
 So this whole project can be opened in github-pages:
 
-[github-pages](https://sanderlanghorstredhotminute.github.io/xeger/)
+[Open github-pages](https://sanderlanghorstredhotminute.github.io/xeger/)

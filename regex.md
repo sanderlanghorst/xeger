@@ -53,5 +53,8 @@
 - [ ] `\1-99` backreference
 
 ## not supported
-- [ ] `(?P<n>)` named groups
-- [ ] `(?P=n)` referencing named groups
+- `(?P<n>)` named groups
+- `(?P=n)` referencing named groups
+
+## Maintenance
+- [ ] Permutate not further then output size

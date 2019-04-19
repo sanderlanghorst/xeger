@@ -21,10 +21,10 @@
 
 ## special characters:
 ### Shorthands
-- [ ] `\d` `[0-9]` digit
-- [ ] `\D` `[^\d]` alles behalve digit
-- [ ] `\w` `[A-Za-z0-9_]` woord
-- [ ] `\W` `[^\w]` alles behalve woord
+- [x] `\d` `[0-9]` digit
+- [x] `\D` `[^\d]` alles behalve digit
+- [x] `\w` `[A-Za-z0-9_]` woord
+- [x] `\W` `[^\w]` alles behalve woord
 - [ ] `\b` woord boundary (zero length)
 - [ ] `\B` alles behalve woord boundary (zero length)
 - [ ] `\s` `[ \t\r\n\f]` whitespace

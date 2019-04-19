@@ -29,13 +29,25 @@ function pick(list, number){
  * Creates an array with integers from start with a number of numbers
  * @param {Number} start the first number
  * @param {Number} number the number of elements
+ * @returns {Array<Number>} a list of numbers
  */
 function range(start, number) {
 	return Array(number).fill().map((_, idx) => start + idx)
 }
 
+/**
+ * creates a range of charcters
+ * @param {string} start the starting character
+ * @param {string} end the ending character
+ * @returns {Array<Number>} a list of charcodes
+ */
+function rangeChars(start, end) {
+	return ((f, t) => range(f, t - f + 1))(start.charCodeAt(0), end.charCodeAt(0));
+}
+
 export {
 	pick,
-	range
+	range,
+	rangeChars
 };
 

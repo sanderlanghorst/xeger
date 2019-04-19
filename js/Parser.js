@@ -106,6 +106,12 @@ function ParseEscaped(result) {
 		//shorthands
 		case 'd':
 			return new CharacterSet(CharacterSet.DigitSet);
+		case 'D':
+			return CharacterSet.FromNegate(CharacterSet.DigitSet);
+		case 'w':
+			return new CharacterSet(CharacterSet.WordSet);
+		case 'W':
+			return CharacterSet.FromNegate(CharacterSet.WordSet);
 			
 		default:
 			return CharacterSet.FromCharacter(char);

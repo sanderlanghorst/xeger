@@ -2,14 +2,21 @@
 
 import SelectorBase from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
-import { range } from './utils/Range.js';
+import { range, rangeChars } from './utils/Range.js';
 import { pick } from './utils/Range.js';
 
 const
-	predefinedSets = {
+	diversitySets = {
 		[Diversity.Simple]:range(65, 26).concat(range(97, 26)), //65 'A'
 		[Diversity.Random]:range(32, 95),
 		[Diversity.Insane]:[]
+	},
+	predefinedSets = {
+		digits: rangeChars('0', '9'),
+		word: rangeChars('A', 'Z')
+				.concat(rangeChars('a','z'))
+				.concat(rangeChars('0','9'))
+				.concat(['_'.charCodeAt(0)])
 	},
 	sizes = {
 		[Size.Small]: 3,
@@ -58,7 +65,7 @@ export default class CharacterSet extends SelectorBase {
 	GetSelection(size, diversity) {
 		/**@type {Array<String>} */
 		const 
-			preSet = predefinedSets[diversity],
+			preSet = diversitySets[diversity],
 			sub = this._set.filter(char => preSet.some(r => r === char)),
 			result = sub.length ? sub : this._set;
 		
@@ -66,6 +73,25 @@ export default class CharacterSet extends SelectorBase {
 					.map(r => String.fromCharCode(r));
 	}
 
+	/// Static Properties
+
+	/**
+	 * Gets the digit set
+	 * @returns {Array<Number>} the charcodes of the digits
+	 */
+	static get DigitSet() {
+		return predefinedSets.digits;
+	}
+
+	/**
+	 * Gets the word set
+	 * @returns {Array<Number>} the charcodes of the word-like characters
+	 */
+	static get WordSet() {
+		return predefinedSets.word;
+	}
+
+	
 	/// Static Methods
 
 	/**
@@ -81,7 +107,7 @@ export default class CharacterSet extends SelectorBase {
 	 * @param {Array<Number>} set a negated character set
 	 */
 	static FromNegate(set){
-		return new CharacterSet(predefinedSets[Diversity.Random].filter(p => !set.some(s => s === p)));
+		return new CharacterSet(diversitySets[Diversity.Random].filter(p => !set.some(s => s === p)));
 	}
 
 	/**
@@ -91,14 +117,6 @@ export default class CharacterSet extends SelectorBase {
 	 */
 	static FromRange(from, to){
 		return new CharacterSet(range(from, to-from));
-	}
-
-	/**
-	 * Gets the digit set
-	 * @returns {Array<Number>} the numbers of the digits
-	 */
-	static get DigitSet() {
-		return ((f, t) => range(f, t - f + 1))('0'.charCodeAt(0), '9'.charCodeAt(0));
 	}
 
 }

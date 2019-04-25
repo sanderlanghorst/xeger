@@ -112,7 +112,7 @@ function ParseEscaped(result) {
 			return new CharacterSet(CharacterSet.WordSet);
 		case 'W':
 			return CharacterSet.FromNegate(CharacterSet.WordSet);
-			
+		
 		default:
 			return CharacterSet.FromCharacter(char);
 	}
@@ -131,7 +131,7 @@ function ParseGroup(result) {
 			case '(':{
 				//new group
 				const
-					g = new Group();
+					g = ParseGroupStart(result);
 				let
 					r = new ParseResult(result.Rest, g);
 				ParseGroup(r);
@@ -193,6 +193,49 @@ function ParseGroup(result) {
 				break;
 		}
 	}
+}
+
+/**
+ * Parses the start of a group
+ * @param {ParseResult} result the current parsed result
+ * @returns {Group} the parsed group
+ */
+function ParseGroupStart(result) {
+	const g = new Group();
+
+	if (peek(result) === '?') {
+		//non-capture or lookaround
+		consume(result);
+		switch(consume(result)){
+			case ':':
+				//non-capturing
+				break;
+
+			case '<': {
+				//lookbehind
+				//check ! or =
+				switch(consume(result)) {
+					case '=':
+					//positive lookbehind
+					break;
+
+				case '!':
+					//negative lookbehind
+					break;
+				}
+				break;
+			}
+
+			case '=':
+				//positive lookahead
+				break;
+
+			case '!':
+				//negative lookahead
+				break;
+		}
+	}
+	return g;
 }
 
 /**

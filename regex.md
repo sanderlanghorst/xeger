@@ -45,7 +45,7 @@
 ### Looking around (not captured)
 - [ ] `(?:)` non-capturing
 - [ ] `(?=)` positive lookahead
-- [ ] `(?!.)` negative lookahead
+- [ ] `(?!)` negative lookahead
 - [ ] `(?<=)` positive lookbehind
 - [ ] `(?<!)` negative lookbehind
 

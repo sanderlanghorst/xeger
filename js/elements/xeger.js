@@ -95,8 +95,9 @@ function init(elements = document.querySelectorAll(selectors.base)) {
 /**
  * renders the result on the page
  * @param {Array<String>} possibilities the result
+ * @param {String} regex the regex
  */
-function setResult(possibilities){
+function setResult(possibilities, regex){
 	const
 		resultElement = baseElement.querySelector(selectors.result),
 		ul = document.createElement('ul');
@@ -104,8 +105,13 @@ function setResult(possibilities){
 
 	possibilities.forEach(p => {
 		const
-			element = document.createElement('li');
-		element.innerText = p;
+			element = document.createElement('li'),
+			matches = new RegExp(regex).test(p);
+		if(matches){
+			element.innerHTML = `✔️<strong>${p}</strong>`;
+		} else {
+			element.innerHTML = `❌<em>${p}</em>`;
+		}
 		ul.append(element);
 	});
 	resultElement.append(ul);
@@ -158,7 +164,7 @@ function onFormSubmitted(event){
 	
 	console.log(possibilities);
 
-	setResult(possibilities);
+	setResult(possibilities, regex.value);
 }
 
 /**

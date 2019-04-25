@@ -15,9 +15,9 @@ Global progress:
 	- [ ] references
 - [ ] implement unit testing
 - [ ] convert to usable module
-- [ ] implement npm packaging
 - [ ] use background worker to prevent ui freeze
 - [ ] load results as they get calculated
+- [ ] implement npm packaging
 
 See detailed progress in this document:
 

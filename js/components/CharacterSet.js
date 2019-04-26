@@ -11,13 +11,16 @@ const
 		[Diversity.Random]:range(32, 95),
 		[Diversity.Insane]:[]
 	},
+	
 	predefinedSets = {
 		digits: rangeChars('0', '9'),
+		whitespaces: [9, 10, 12, 13, 32],
 		word: rangeChars('A', 'Z')
 				.concat(rangeChars('a','z'))
 				.concat(rangeChars('0','9'))
-				.concat(['_'.charCodeAt(0)])
+				.concat(['_'.charCodeAt(0)]),
 	},
+
 	sizes = {
 		[Size.Small]: 3,
 		[Size.Medium]: 6,
@@ -81,6 +84,14 @@ export default class CharacterSet extends SelectorBase {
 	 */
 	static get DigitSet() {
 		return predefinedSets.digits;
+	}
+
+	/**
+	 * Gets the whitespace set
+	 * @returns {Array<Number>} the charcodes of the whitespace characters
+	 */
+	static get WhitespaceSet() {
+		return predefinedSets.whitespaces;
 	}
 
 	/**

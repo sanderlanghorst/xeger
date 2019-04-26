@@ -12,16 +12,27 @@ export default class Group extends SelectorBase {
 	
 	constructor(){
 		super();
+
 		/** @type {Array<SelectorBase>} */
 		this._components = [];
+
+		/** @type {Boolean} */
+		this._isNonCapturing = false;
 	}
 
 	/// Properties
 
 	/**
+	 * Indicates whether this group is non-capturing
+	 */
+	get IsNonCapturing() {
+		return this._isNonCapturing;
+	}
+
+	/**
 	 * @inheritdoc
 	 */
-	get Components(){
+	get Components() {
 		return this._components;
 	}
 
@@ -32,7 +43,7 @@ export default class Group extends SelectorBase {
 	 * adds a component to the group
 	 * @param {SelectorBase} component the new component
 	 */
-	AddComponent(component){
+	AddComponent(component) {
 		this._components.push(component);
 	}
 
@@ -42,7 +53,7 @@ export default class Group extends SelectorBase {
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity){
+	GetSelection(size, diversity) {
 		const
 			selection = this._components.map(c => c.GetSelection(size, diversity)),
 			result = permute(selection, size);

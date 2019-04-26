@@ -16,16 +16,35 @@ const
 		base: `.js-${moduleName}`,
 		diversity: `.js-${moduleName}-diversity`,
 		form: `form`,
+		format: `.js-${moduleName}-format`,
 		regex: `.js-${moduleName}-regex`,
 		result: `.js-${moduleName}-result`,
 		size: `.js-${moduleName}-size`
-	};
+	},
+	whitespaceMap = new Map([
+		[' ', '␠'],
+		['\t', '→'],
+		['\t', '→'],
+		['\r', '␍'],
+		['\n', '␤'],
+		['\f', '␌']
+	]);
 
 /// Privates
 let
 	baseElement = null;
 
-	
+/**
+ * Formats the whitespaces of the string
+ * @param {String} string the input string
+ * @return {String}
+ */
+function formatWhitespace(string) {
+	return Array.from(whitespaceMap)
+			.reduce((agg, [key,value]) => agg.replace(new RegExp(key, 'g'), `<span class="whitespace">${value}</span>`),
+					string);
+}
+
 /**
  * @returns {Symbol} The selected diversity
  */
@@ -96,8 +115,9 @@ function init(elements = document.querySelectorAll(selectors.base)) {
  * renders the result on the page
  * @param {Array<String>} possibilities the result
  * @param {String} regex the regex
+ * @param {Boolean} format wether to format the whitespaces
  */
-function setResult(possibilities, regex){
+function setResult(possibilities, regex, format){
 	const
 		resultElement = baseElement.querySelector(selectors.result),
 		ul = document.createElement('ul');
@@ -105,14 +125,17 @@ function setResult(possibilities, regex){
 
 	possibilities.forEach(p => {
 		const
-			element = document.createElement('li'),
-			matches = new RegExp(regex).test(p);
+			listElement = document.createElement('li'),
+			matches = new RegExp(regex).test(p),
+			formatted = format ? formatWhitespace(p) : p;
+			
+		listElement.classList.add('mono');
 		if(matches){
-			element.innerHTML = `✔️<strong>${p}</strong>`;
+			listElement.innerHTML = `✔️<em>${formatted}</em>`;
 		} else {
-			element.innerHTML = `❌<em>${p}</em>`;
+			listElement.innerHTML = `❌<em>${formatted}</em>`;
 		}
-		ul.append(element);
+		ul.append(listElement);
 	});
 	resultElement.append(ul);
 }
@@ -158,13 +181,14 @@ function onFormSubmitted(event){
 	const
 		sizeOption = getSizeOption(),
 		diversityOption = getDiversityOption(),
+		format = ((checkbox) => checkbox ? checkbox.checked : false)(baseElement.querySelector(selectors.format)),
 		parser = new Parser(regex.value),
 		parsedComponent = parser.Parse(),
 		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
 	
 	console.log(possibilities);
 
-	setResult(possibilities, regex.value);
+	setResult(possibilities, regex.value, format);
 }
 
 /**

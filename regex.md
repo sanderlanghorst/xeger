@@ -27,18 +27,16 @@
 - [x] `\W` `[^\w]` alles behalve woord
 - [ ] `\b` woord boundary (zero length)
 - [ ] `\B` alles behalve woord boundary (zero length)
-- [ ] `\s` `[ \t\r\n\f]` whitespace
-- [ ] `\S` `[^\s]` alles behalve whitespace
+- [x] `\s` `[ \t\r\n\f]` whitespace
+- [x] `\S` `[^\s]` alles behalve whitespace
 
 ### Non-printable
-- [ ] `\t` tab
-- [ ] `\r` carier return
-- [ ] `\n` newline
-- [ ] `\a` bell
-- [ ] `\e` escape
-- [ ] `\f` form feed
+- [x] `\t` tab
+- [x] `\r` carier return
+- [x] `\n` newline
+- [x] `\f` form feed
 - [ ] `\cA-Z` ASCII control characters
-- [ ] `\x01-1A` ASCII control characters
+- [ ] `\x01-FF` ASCII characters
 - [ ] `\x{FFFF}` unicode character
 - [ ] `\uFFFF` unicode character
 

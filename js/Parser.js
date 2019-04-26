@@ -112,7 +112,18 @@ function ParseEscaped(result) {
 			return new CharacterSet(CharacterSet.WordSet);
 		case 'W':
 			return CharacterSet.FromNegate(CharacterSet.WordSet);
-		
+		case 's':
+			return new CharacterSet(CharacterSet.WhitespaceSet);
+		case 'S':
+			return CharacterSet.FromNegate(CharacterSet.WhitespaceSet);
+		case 'r':
+			return CharacterSet.FromCharacter('\r');
+		case 'n':
+			return CharacterSet.FromCharacter('\n');
+		case 't':
+			return CharacterSet.FromCharacter('\t');
+		case 'f':
+			return CharacterSet.FromCharacter('\f');
 		default:
 			return CharacterSet.FromCharacter(char);
 	}

@@ -8,7 +8,10 @@
 	<title>Regex reverse generator</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
 	 crossorigin="anonymous">
-
+	<style>
+		.whitespace { color:lightblue; }
+		.mono { font-family: Consolas,'Courier New', monospace; }
+	</style>
 </head>
 
 <body>
@@ -44,6 +47,9 @@
 						<option value="2">Random</option>
 						<option value="3">Insane</option>
 					</select>
+
+					<input type="checkbox" id="input-format" name="formatwhitespace" class="js-xeger-format" checked>
+					<label for="input-format">Visible whitespaces (replace)</label>
 				</fieldset>
 
 				<button type="submit" class="btn btn-primary">Generate</button>

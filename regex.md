@@ -6,8 +6,6 @@
 - [x] `[abc]` lijst van karakters
 - [x] `[a-z]` bereik van karakters
 - [x] `[^a-z]` alles behalve bereik van karakters
-- [ ] `^` begin
-- [ ] `$` eind
 - [x] `|` of
 - [x] `?` 0 of 1 keer
 - [x] `*` 0 of meer
@@ -25,8 +23,6 @@
 - [x] `\D` `[^\d]` alles behalve digit
 - [x] `\w` `[A-Za-z0-9_]` woord
 - [x] `\W` `[^\w]` alles behalve woord
-- [ ] `\b` woord boundary (zero length)
-- [ ] `\B` alles behalve woord boundary (zero length)
 - [x] `\s` `[ \t\r\n\f]` whitespace
 - [x] `\S` `[^\s]` alles behalve whitespace
 
@@ -41,7 +37,11 @@
 - [ ] `\uFFFF` unicode character
 
 ### Looking around (not captured)
-- [ ] `(?:)` non-capturing
+- [ ] `^` begin
+- [ ] `$` eind
+- [ ] `\b` woord boundary (zero length)
+- [ ] `\B` alles behalve woord boundary (zero length)
+- [x] `(?:)` non-capturing
 - [ ] `(?=)` positive lookahead
 - [ ] `(?!)` negative lookahead
 - [ ] `(?<=)` positive lookbehind

@@ -11,7 +11,9 @@ Global progress:
 - [x] setup
 - [ ] implement regex rules
 	- [x] basics
-	- [ ] shorthands
+	- [x] shorthands
+	- [ ] non-printables
+	- [ ] look-around
 	- [ ] references
 - [ ] implement unit testing
 - [ ] convert to usable module

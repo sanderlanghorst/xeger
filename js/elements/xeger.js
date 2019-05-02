@@ -37,12 +37,23 @@ let
 /**
  * Formats the whitespaces of the string
  * @param {String} string the input string
- * @return {String}
+ * @return {Array<Node>}
  */
 function formatWhitespace(string) {
-	return Array.from(whitespaceMap)
-			.reduce((agg, [key,value]) => agg.replace(new RegExp(key, 'g'), `<span class="whitespace">${value}</span>`),
-					string);
+	const elements = [];
+	
+	for (let i = 0; i < string.length; i++) {
+		if (whitespaceMap.has(string.charAt(i))) {
+			const span = document.createElement('span');
+			span.classList.add('whitespace');
+			span.innerText = whitespaceMap.get(string.charAt(i));
+			elements.push(span);
+		} else {
+			elements.push(document.createTextNode(string.charAt(i)));
+		}
+	}
+
+	return elements;
 }
 
 /**
@@ -121,23 +132,22 @@ function setResult(possibilities, regex, format){
 	const
 		resultElement = baseElement.querySelector(selectors.result),
 		ul = document.createElement('ul');
+	
 	resultElement.innerHTML = '';
 
 	possibilities.forEach(p => {
 		const
 			listElement = document.createElement('li'),
 			matches = new RegExp(regex).test(p),
-			formatted = format ? formatWhitespace(p) : p;
-			
-		listElement.classList.add('mono');
-		if(matches){
-			listElement.innerHTML = `✔️<em>${formatted}</em>`;
-		} else {
-			listElement.innerHTML = `❌<em>${formatted}</em>`;
-		}
-		ul.append(listElement);
+			formattedElements = format ? formatWhitespace(p) : [document.createTextNode(p)],
+			emElement = document.createElement('em');
+		formattedElements.forEach(f => emElement.appendChild(f));
+		
+		listElement.append(matches ? '✔️' : '❌');
+		listElement.appendChild(emElement);
+		ul.appendChild(listElement);
 	});
-	resultElement.append(ul);
+	resultElement.appendChild(ul);
 }
 
 /**

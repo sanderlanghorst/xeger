@@ -7,6 +7,7 @@
 
 import Parser from '../Parser.js';
 import {Size, Diversity} from '../Enums.js';
+import {GroupSequence} from '../utils/Enumerable.js';
 
 
 /// Constants
@@ -42,17 +43,18 @@ let
 function formatWhitespace(string) {
 	const elements = [];
 	
-	for (let i = 0; i < string.length; i++) {
-		if (whitespaceMap.has(string.charAt(i))) {
+	const grouping = GroupSequence(string, (l,r) => whitespaceMap.has(l) === whitespaceMap.has(r));
+	for (let g of grouping) {
+		if(whitespaceMap.has(g[0])){
 			const span = document.createElement('span');
 			span.classList.add('whitespace');
-			span.innerText = whitespaceMap.get(string.charAt(i));
+			span.innerText = g.map(e => whitespaceMap.get(e)).join('');
 			elements.push(span);
 		} else {
-			elements.push(document.createTextNode(string.charAt(i)));
+			elements.push(document.createTextNode(g.join('')));
 		}
 	}
-
+	
 	return elements;
 }
 

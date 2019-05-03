@@ -33,7 +33,6 @@
 - [x] `\f` form feed
 - [ ] `\cA-Z` ASCII control characters
 - [ ] `\x01-FF` ASCII characters
-- [ ] `\x{FFFF}` unicode character
 - [ ] `\uFFFF` unicode character
 
 ### Looking around (not captured)
@@ -54,5 +53,5 @@
 - `(?P<n>)` named groups
 - `(?P=n)` referencing named groups
 
-## Maintenance
-- [ ] Permutate not further then output size
+## Optimization
+- [ ] Permutate not further then needed

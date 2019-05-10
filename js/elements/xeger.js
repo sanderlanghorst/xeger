@@ -23,12 +23,10 @@ const
 		size: `.js-${moduleName}-size`
 	},
 	whitespaceMap = new Map([
-		[' ', '␠'],
-		['\t', '→'],
-		['\t', '→'],
-		['\r', '␍'],
-		['\n', '␤'],
-		['\f', '␌']
+		[0, '␀'], [1, '␁'], [2, '␂'], [3, '␃'], [4, '␄'], [5, '␅'], [6, '␆'], [7, '␇'], [8, '␈'], [9, '␉'],
+		[10, '␊'], [11, '␋'], [12, '␌'], [13, '␍'], [14, '␎'], [15, '␏'], [16, '␐'], [17, '␑'], [18, '␒'], [19, '␓'],
+		[20, '␔'], [21, '␕'], [22, '␖'], [23, '␗'], [24, '␘'], [25, '␙'], [26, '␚'], [27, '␛'], [28, '␜'], [29, '␝'],
+		[30, '␞'], [31, '␟'], [32, '␠']
 	]);
 
 /// Privates
@@ -43,12 +41,13 @@ let
 function formatWhitespace(string) {
 	const elements = [];
 	
-	const grouping = GroupSequence(string, (l,r) => whitespaceMap.has(l) === whitespaceMap.has(r));
+	/**@type {Array<Array<String>>} */
+	const grouping = GroupSequence(string, (l,r) => whitespaceMap.has(l.charCodeAt(0)) === whitespaceMap.has(r.charCodeAt(0)));
 	for (let g of grouping) {
-		if(whitespaceMap.has(g[0])){
+		if(whitespaceMap.has(g[0].charCodeAt(0))) {
 			const span = document.createElement('span');
 			span.classList.add('whitespace');
-			span.innerText = g.map(e => whitespaceMap.get(e)).join('');
+			span.innerText = g.map(e => whitespaceMap.get(e.charCodeAt(0))).join('');
 			elements.push(span);
 		} else {
 			elements.push(document.createTextNode(g.join('')));

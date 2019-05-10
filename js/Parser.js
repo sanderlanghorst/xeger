@@ -124,6 +124,13 @@ function ParseEscaped(result) {
 			return CharacterSet.FromCharacter('\t');
 		case 'f':
 			return CharacterSet.FromCharacter('\f');
+		case 'c': //ASCII control character (A-Z)
+			break;
+		case 'x': //ASCII character (01-FF)
+			
+			break;
+		case 'u': //Unicode character (0000-FFFF)
+			break;
 		default:
 			return CharacterSet.FromCharacter(char);
 	}
@@ -175,7 +182,7 @@ function ParseGroup(result) {
 			}
 
 			case '.':
-				result.AddComponent(CharacterSet.FromRange(0,255));
+				result.AddComponent(CharacterSet.FromRange(0, 1279));
 				break;
 
 			case '*': 

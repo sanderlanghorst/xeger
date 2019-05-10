@@ -1,7 +1,8 @@
 /**
  * The array as generator
- * @param {Array<any>} source the source
- * @returns {IterableIterator<any>} the elements
+ * @param {Array<T>} source the source
+ * @returns {IterableIterator<T>} the elements
+ * @template T
  */
 function* FromArray(source) {
 	for(let element of source){
@@ -10,19 +11,18 @@ function* FromArray(source) {
 }
 
 /**
- * @callback SequenceSelector
- * @param {any} left the left element
- * @param {any} right the right element
- * @returns {Boolean} wheter the elements should be grouped
- */
-/**
  * Groups a list by given sequence
- * @param {Array<any>} source the list to group
+ * @param {Array<T>} source the list to group
  * @param {SequenceSelector} sequenceSelector
- * @returns {Array<Array<any>>}
+ * @returns {Array<Array<T>>}
+ * @template T the type of the element
  */
 function* GroupSequence(source, sequenceSelector)
 {
+	if (source == null || !source.length) {
+		return;
+	}
+	
 	const iterator = FromArray(source);
 	
 	let element = iterator.next().value;
@@ -47,3 +47,12 @@ function* GroupSequence(source, sequenceSelector)
 }
 
 export {GroupSequence};
+
+
+/**
+ * @callback SequenceSelector
+ * @param {T} left the left element
+ * @param {T} right the right element
+ * @returns {Boolean} wheter the elements should be grouped
+ * @template T
+ */

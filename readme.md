@@ -12,7 +12,7 @@ Global progress:
 - [ ] implement regex rules
 	- [x] basics
 	- [x] shorthands
-	- [ ] non-printables
+	- [x] non-printables
 	- [ ] look-around
 	- [ ] references
 - [ ] implement unit testing

@@ -31,13 +31,12 @@
 - [x] `\r` carier return
 - [x] `\n` newline
 - [x] `\f` form feed
-- [ ] `\cA-Z` ASCII control characters
-- [ ] `\x01-FF` ASCII characters
-- [ ] `\uFFFF` unicode character
+- [x] `\x01-FF` ASCII characters
+- [x] `\uFFFF` unicode character
 
 ### Looking around (not captured)
-- [ ] `^` begin
-- [ ] `$` eind
+- [o] `^` begin
+- [o] `$` eind
 - [ ] `\b` woord boundary (zero length)
 - [ ] `\B` alles behalve woord boundary (zero length)
 - [x] `(?:)` non-capturing

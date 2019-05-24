@@ -105,34 +105,66 @@ function ParseEscaped(result) {
 	switch(char) {
 		//shorthands
 		case 'd':
-			return new CharacterSet(CharacterSet.DigitSet);
+			result.AddComponent(new CharacterSet(CharacterSet.DigitSet));
+			break;
+
 		case 'D':
-			return CharacterSet.FromNegate(CharacterSet.DigitSet);
+			result.AddComponent(CharacterSet.FromNegate(CharacterSet.DigitSet));
+			break;
+
 		case 'w':
-			return new CharacterSet(CharacterSet.WordSet);
+			result.AddComponent(new CharacterSet(CharacterSet.WordSet));
+			break;
+
 		case 'W':
-			return CharacterSet.FromNegate(CharacterSet.WordSet);
+			result.AddComponent(CharacterSet.FromNegate(CharacterSet.WordSet));
+			break;
+
 		case 's':
-			return new CharacterSet(CharacterSet.WhitespaceSet);
+			result.AddComponent(new CharacterSet(CharacterSet.WhitespaceSet));
+			break;
+
 		case 'S':
-			return CharacterSet.FromNegate(CharacterSet.WhitespaceSet);
+			result.AddComponent(CharacterSet.FromNegate(CharacterSet.WhitespaceSet));
+			break;
+
 		case 'r':
-			return CharacterSet.FromCharacter('\r');
+			result.AddComponent(CharacterSet.FromCharacter('\r'));
+			break;
+
 		case 'n':
-			return CharacterSet.FromCharacter('\n');
+			result.AddComponent( CharacterSet.FromCharacter('\n'));
+			break;
+
 		case 't':
-			return CharacterSet.FromCharacter('\t');
+			result.AddComponent(CharacterSet.FromCharacter('\t'));
+			break;
+
 		case 'f':
-			return CharacterSet.FromCharacter('\f');
+			result.AddComponent(CharacterSet.FromCharacter('\f'));
+			break;
+			
 		case 'c': //ASCII control character (A-Z)
 			break;
-		case 'x': //ASCII character (01-FF)
-			
+
+		case 'x': { //ASCII character (01-FF)
+			if(ParseHex(result, 2, false)) {
+				return;
+			}
+			result.AddComponent(CharacterSet.FromCharacter(char));
 			break;
-		case 'u': //Unicode character (0000-FFFF)
+		}
+
+		case 'u': { //Unicode character (0000-FFFF)
+			if(ParseHex(result, 4, true)) {
+				return;
+			}
+			result.AddComponent(CharacterSet.FromCharacter(char));
 			break;
+		}
+
 		default:
-			return CharacterSet.FromCharacter(char);
+			result.AddComponent(CharacterSet.FromCharacter(char));
 	}
 }
 
@@ -149,7 +181,7 @@ function ParseGroup(result) {
 			case '(':{
 				//new group
 				const
-					g = ParseGroupStart(result);
+					g = GetGroupStart(result);
 				let
 					r = new ParseResult(result.Rest, g);
 				ParseGroup(r);
@@ -200,9 +232,13 @@ function ParseGroup(result) {
 			case '{':
 				ParseQuantifierRange(result);
 				break;
+
+			case '^':
+			case '$':
+				break;
 			
 			case '\\':
-				result.AddComponent(ParseEscaped(result));
+				ParseEscaped(result);
 				break;
 
 			default:
@@ -214,11 +250,11 @@ function ParseGroup(result) {
 }
 
 /**
- * Parses the start of a group
+ * gets the start of a group
  * @param {ParseResult} result the current parsed result
- * @returns {Group} the parsed group
+ * @returns {Group} the created group
  */
-function ParseGroupStart(result) {
+function GetGroupStart(result) {
 	const g = new Group();
 
 	if (peek(result) === '?') {
@@ -257,6 +293,32 @@ function ParseGroupStart(result) {
 }
 
 /**
+ * Parse a hexadecimal number from the string
+ * @param {ParseResult} result the current parsed result
+ * @param {Number} maxNumber the maximum number of characters to parse for a hexadecimal number
+ * @param {Boolean} isExact the maximum number must be reached
+ * @returns {Boolean} whether the parse has succeeded
+ */
+function ParseHex(result, maxNumber, isExact) {
+	const seperateResult = new ParseResult(result.Rest, result.Component)
+	let parsed = '';
+	for(let i = 0; i < maxNumber; i++) {
+		if(!Number.isNaN(parseInt(peek(seperateResult), 16))) {
+			parsed += consume(seperateResult);
+		} else {
+			break;
+		}
+	}
+	if(parsed !== '' && !isExact || parsed.length === maxNumber) {
+		result.Rest = seperateResult.Rest;
+		const characterSet = new CharacterSet([parseInt(parsed, 16)]);
+		result.AddComponent(characterSet);
+		return true;
+	}
+	return false;
+}
+
+/**
  * parses the character set
  * @param {ParseResult} result the current parsed result
  */
@@ -275,6 +337,7 @@ function ParseSet(result){
 	while(result.Rest.length) {
 		const
 			char = consume(result);
+		let charCode = char.charCodeAt(0);
 		
 		switch(char){
 			case '-':
@@ -290,22 +353,22 @@ function ParseSet(result){
 									: new CharacterSet(sets));
 				return;
 			
-			case '\\': {
-				const escapedSet = ParseEscaped(result);
-				escapedSet.Set.forEach(i => sets.push(i));
-				break;
-			}
-
+			case '\\': 
+				const seperateResult = new ParseResult(result.Rest, new Group());
+				ParseEscaped(seperateResult);
+				result.Rest = seperateResult.Rest;
+				charCode = seperateResult.Component.Components[0].Set[0];
+			
 			default:
 				if(rangeSet) {
-					range(rangeFrom, char.charCodeAt(0) - rangeFrom)
+					range(rangeFrom, charCode - rangeFrom)
 						.forEach(i => sets.push(i));
-					sets.push(char.charCodeAt(0));
+					sets.push(charCode);
 					rangeFrom = null;
 				} else {
 					if(rangeFrom !== null)
 						sets.push(rangeFrom);
-					rangeFrom = char.charCodeAt(0);
+					rangeFrom = charCode;
 				}
 				rangeSet = false;
 				

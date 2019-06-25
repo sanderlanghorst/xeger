@@ -9,7 +9,7 @@ There are a lot of regular expression websites, but not many give input examples
 This project is still work in progress.
 Global progress:
 - [x] setup
-- [ ] implement regex rules
+- [o] implement regex rules
 	- [x] basics
 	- [x] shorthands
 	- [x] non-printables

@@ -331,6 +331,20 @@ function ParseSet(result){
 		rangeFrom = null,
 		rangeSet = false;
 
+	const addChar = (charCode) => {
+		if(rangeSet) {
+			range(rangeFrom, charCode - rangeFrom)
+				.forEach(i => sets.push(i));
+			sets.push(charCode);
+			rangeFrom = null;
+		} else {
+			if(rangeFrom !== null)
+				sets.push(rangeFrom);
+			rangeFrom = charCode;
+		}
+		rangeSet = false;
+	};
+
 	if(negate)
 		consume(result);
 
@@ -338,10 +352,14 @@ function ParseSet(result){
 		const
 			char = consume(result);
 		let charCode = char.charCodeAt(0);
-		
+
 		switch(char){
 			case '-':
-				rangeSet = true;
+				if(rangeFrom !== null) {
+					rangeSet = true;
+				} else {
+					addChar(charCode);
+				}
 				break;
 
 			case ']':
@@ -360,17 +378,7 @@ function ParseSet(result){
 				charCode = seperateResult.Component.Components[0].Set[0];
 			
 			default:
-				if(rangeSet) {
-					range(rangeFrom, charCode - rangeFrom)
-						.forEach(i => sets.push(i));
-					sets.push(charCode);
-					rangeFrom = null;
-				} else {
-					if(rangeFrom !== null)
-						sets.push(rangeFrom);
-					rangeFrom = charCode;
-				}
-				rangeSet = false;
+				addChar(charCode);
 				
 				break;
 		}

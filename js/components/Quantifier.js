@@ -80,12 +80,18 @@ export default class Quantifier extends SelectorBase {
 
 		const
 			numberOfResults = pick(range(this._min, (Math.min(sizeNumber, this._max - this._min) + 1)),
-									pickNumber),
-			results = numberOfResults
-						.map(i => range(1, i)
-									.map(_ => this._component.GetSelection(size, diversity)
-									)),
-			resultSets = results.flatMap(r => permute(r, size));
+								pickNumber),
+			results = [];
+			
+		for(let nor of numberOfResults){
+			const subResults = [['']];
+			const list = range(1, nor);
+			for(let sub of list){
+				subResults.push(this._component.GetSelection(size, diversity));
+			}
+			results.push(subResults);
+		}
+		const resultSets = results.flatMap(r => permute(r, size));
 		return resultSets;
 	}
 

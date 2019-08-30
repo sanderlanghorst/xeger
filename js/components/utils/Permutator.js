@@ -5,12 +5,6 @@ import { pick } from './Range.js';
 
 
 const sizes = {
-	addPick: {
-		[Size.Small]: 0,
-		[Size.Medium]: 1,
-		[Size.Large]: 2,
-		[Size.Insane]: 4
-	},
 	totalSize: {
 		[Size.Small]: 3,
 		[Size.Medium]: 6,
@@ -22,31 +16,6 @@ const sizes = {
 /// Privat Methods
 
 
-/**
- * 
- * @param {String} pre the preceding string
- * @param {Array<Array<String>>} list the list of permutables
- * @param {Symbol} size the size of the result
- * @returns {Array<String>}
- */
-function innerPermute(pre, list){
-	/**@type {Array<Array<String>>} */
-	const result = [];
-
-	if(list.length == 0)
-		return [pre];
-
-	const
-		perlist = list[0];
-	if(perlist.length == 0)
-		perlist.push('');
-	perlist.forEach((value) => {
-		result.push(innerPermute(pre + value, list.slice(1, list.length)));
-	});
-
-	return result.flatMap(d => d);
-}
-
 /// Exports
 
 /**
@@ -56,17 +25,32 @@ function innerPermute(pre, list){
  * @returns {Array<String>}
  */
 export default function permute(list, size) {
-	if(list.length <= 1)
-		return innerPermute('', list);
+	const workingList = list.map(l => l.filter(i => i !== undefined || i !== '')).filter(l => l.length > 0);
+	if(!workingList.length){
+		return [];
+	}
+	if(workingList.length === 1){
+		return workingList.reduce((a,s) => `${a}${s}`);
+	}
+	
+	let maxSize = workingList.reduce((a, s) => a * s.length, 1);
 
-	const 
-		innerList = [],
-		totalDimention = list.reduce((sum, value) => sum + value.length, 0),
-		entropy = Math.ceil(totalDimention / list.length / list.length);
+	const
+		max = sizes.totalSize[size],
+		sizeDiff = maxSize / Math.min(maxSize, max),
+		outputSize = maxSize = Math.min(maxSize, max),
+		output = [];
 
-	for (let i = 0; i < list.length; i++) {
-		innerList.push(pick(list[i], entropy + sizes.addPick[size]));
+	for(let s = 0; s < workingList.length; s++){
+
+		maxSize = Math.ceil((maxSize * sizeDiff) / workingList[s].length / sizeDiff);
+		for(let i = 0; i < outputSize; i++){
+			var p = Math.floor(i / maxSize) + Math.round(Math.random() * outputSize);
+			if(output[i] === undefined)
+				output[i] = '';
+			output[i] = output[i] + workingList[s][p % workingList[s].length];
+		}
 	}
 
-	return pick(innerPermute('', innerList), sizes.totalSize[size]);
+	return output;
 }

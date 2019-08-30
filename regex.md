@@ -53,4 +53,4 @@
 - `(?P=n)` referencing named groups
 
 ## Optimization
-- [ ] Permutate not further then needed
+- [x] Permutate not further then needed

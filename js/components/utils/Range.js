@@ -1,9 +1,10 @@
 
 /**
  * pick a number of pseudo random following items from the list
- * @param {Array<any>} list a list
+ * @param {Array<T>} list a list
  * @param {Number} number Number of items to pick from list
- * @returns {Array<any>} A randomly picked list (or the complete list if the list was shorter then the number)
+ * @returns {Array<T>} A randomly picked list (or the complete list if the list was shorter then the number)
+ * @template T
  */
 function pick(list, number){
 	if(number >= list.length)

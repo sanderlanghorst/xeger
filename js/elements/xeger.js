@@ -136,7 +136,7 @@ function setResult(possibilities, regex, format){
 	
 	resultElement.innerHTML = '';
 
-	possibilities.forEach(p => {
+	possibilities.sort().forEach(p => {
 		const
 			listElement = document.createElement('li'),
 			matches = new RegExp(regex).test(p),

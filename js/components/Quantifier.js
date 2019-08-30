@@ -9,14 +9,14 @@ import permute from './utils/Permutator.js';
 
 const
 	diversityNumbers = {
-		[Diversity.Simple] : 3,
-		[Diversity.Random] : 6,
+		[Diversity.Simple] : 6,
+		[Diversity.Random] : 10,
 		[Diversity.Insane] : 20
 	},
 	sizeNumbers = {
-		[Size.Small]: 3,
-		[Size.Medium]: 6,
-		[Size.Large]: 12,
+		[Size.Small]: 5,
+		[Size.Medium]: 10,
+		[Size.Large]: 16,
 		[Size.Insane]: 0
 	}
 
@@ -85,8 +85,8 @@ export default class Quantifier extends SelectorBase {
 			
 		for(let nor of numberOfResults){
 			const subResults = [['']];
-			const list = range(1, nor);
-			for(let sub of list){
+			const list = pick(range(1, nor), sizeNumber);
+			for(let _ of list){
 				subResults.push(this._component.GetSelection(size, diversity));
 			}
 			results.push(subResults);

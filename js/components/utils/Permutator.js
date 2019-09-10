@@ -33,19 +33,24 @@ export default function permute(list, size) {
 		return workingList.reduce((a,s) => `${a}${s}`);
 	}
 	
-	let maxSize = workingList.reduce((a, s) => a * s.length, 1);
+	let 
+		maxSize = workingList.reduce((a, s) => a * s.length, 1),
+		skipSize = maxSize;
 
 	const
 		max = sizes.totalSize[size],
 		sizeDiff = maxSize / Math.min(maxSize, max),
-		outputSize = maxSize = Math.min(maxSize, max),
 		output = [];
+
+	skipSize = maxSize = Math.min(maxSize, max)
 
 	for(let s = 0; s < workingList.length; s++){
 
-		maxSize = Math.ceil((maxSize * sizeDiff) / workingList[s].length / sizeDiff);
-		for(let i = 0; i < outputSize; i++){
-			var p = Math.floor(i / maxSize) + Math.round(Math.random() * outputSize);
+		skipSize = (skipSize * sizeDiff) / workingList[s].length / sizeDiff;
+		
+		for(let i = 0; i < maxSize; i++){
+			var p = Math.floor(i / skipSize) + Math.floor(Math.random() * 1.0 / skipSize);
+			
 			if(output[i] === undefined)
 				output[i] = '';
 			output[i] = output[i] + workingList[s][p % workingList[s].length];

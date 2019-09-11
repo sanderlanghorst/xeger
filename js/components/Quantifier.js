@@ -14,10 +14,10 @@ const
 		[Diversity.Insane] : 20
 	},
 	sizeNumbers = {
-		[Size.Small]: 5,
-		[Size.Medium]: 10,
-		[Size.Large]: 16,
-		[Size.Insane]: 0
+		[Size.Small]: 0.1,
+		[Size.Medium]: 0.5,
+		[Size.Large]: 0.8,
+		[Size.Insane]: 1
 	}
 
 /// Class
@@ -70,17 +70,14 @@ export default class Quantifier extends SelectorBase {
 	 */
 	GetSelection(size, diversity){
 		const
-			pickNumber = diversityNumbers[diversity];
-		let
+			pickNumber = diversityNumbers[diversity],
 			sizeNumber = sizeNumbers[size];
 		
-		if(size === Size.Insane){
-			sizeNumber = this._max;
-		}
-
 		const
-			numberOfResults = pick(range(this._min, this._max - this._min + 1),
-								pickNumber),
+			numberOfResults = pick(
+				range(this._min, this._max - this._min + 1)
+					.map(i => ((i - this._min) * sizeNumber) + this._min),
+				pickNumber),
 			results = [];
 			
 		for(let nor of numberOfResults){

@@ -6,9 +6,9 @@ import { pick } from './Range.js';
 
 const sizes = {
 	totalSize: {
-		[Size.Small]: 3,
-		[Size.Medium]: 6,
-		[Size.Large]: 12,
+		[Size.Small]: 6,
+		[Size.Medium]: 10,
+		[Size.Large]: 20,
 		[Size.Insane]: 100
 	}
 }

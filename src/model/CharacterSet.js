@@ -1,9 +1,8 @@
 /// Imports
 
 import SelectorBase from './SelectorBase.js';
-import { Size, Diversity } from '../Enums.js';
-import { range, rangeChars } from './utils/Range.js';
-import { pick } from './utils/Range.js';
+import { Size, Diversity } from '/src/utils/Enums.js';
+import { range, rangeChars, pick } from '/src/utils/Range.js';
 
 const
 	diversitySets = {

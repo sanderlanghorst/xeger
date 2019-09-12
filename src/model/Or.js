@@ -1,7 +1,6 @@
 /// Imports
 
 import SelectorBase from './SelectorBase.js';
-import { Size, Diversity } from '../Enums.js';
 
 
 /// Class

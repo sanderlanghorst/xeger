@@ -1,7 +1,7 @@
 /// Imports
 
 import SelectorBase from './SelectorBase.js';
-import permute from './utils/Permutator.js';
+import permute from '/src/generator/Permutator.js';
 
 /// Private methods
 

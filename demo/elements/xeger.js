@@ -5,9 +5,9 @@
 
 /// Imports
 
-import Parser from '../Parser.js';
-import {Size, Diversity} from '../Enums.js';
-import {GroupSequence} from '../utils/Enumerable.js';
+import Parser from '/src/parser/Parser.js';
+import {Size, Diversity} from '/src/utils/Enums.js';
+import {GroupSequence} from '/src/utils/Enumerable.js';
 
 
 /// Constants

@@ -1,8 +1,6 @@
 /// Imports
 
-import { Size } from '../../Enums.js';
-import { pick } from './Range.js';
-
+import { Size } from '/src/utils/Enums.js';
 
 const sizes = {
 	totalSize: {

@@ -5,12 +5,12 @@
 /// Imports
 
 
-import CharacterSet from './components/CharacterSet.js';
-import Group from './components/Group.js';
-import SelectorBase from './components/SelectorBase.js';
-import Or from './components/Or.js';
-import Quantifier from './components/Quantifier.js';
-import { range } from './components/utils/Range.js';
+import CharacterSet from '/src/model/CharacterSet.js';
+import Group from '/src/model/Group.js';
+import SelectorBase from '/src/model/SelectorBase.js';
+import Or from '/src/model/Or.js';
+import Quantifier from '/src/model/Quantifier.js';
+import { range } from '/src/utils/Range.js';
 
 
 /// Private type

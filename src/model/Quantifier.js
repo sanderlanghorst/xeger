@@ -1,9 +1,9 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
+import {SelectorBase} from './SelectorBase.js';
 import {pick, range} from '/src/utils/Range.js';
 import { Size, Diversity } from '/src/utils/Enums.js';
-import permute from '/src/generator/Permutator.js';
+import {permute} from '/src/generator/Permutator.js';
 
 /// Privates
 
@@ -22,7 +22,7 @@ const
 
 /// Class
 
-export default class Quantifier extends SelectorBase {
+export class Quantifier extends SelectorBase {
 	
 	/**
 	 * Instanciates a Quantifier selector

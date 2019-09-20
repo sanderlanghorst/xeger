@@ -17,7 +17,7 @@ function* FromArray(source) {
  * @returns {Array<Array<T>>}
  * @template T the type of the element
  */
-function* GroupSequence(source, sequenceSelector)
+export function* GroupSequence(source, sequenceSelector)
 {
 	if (source == null || !source.length) {
 		return;
@@ -45,8 +45,6 @@ function* GroupSequence(source, sequenceSelector)
 
 	yield elements;
 }
-
-export {GroupSequence};
 
 
 /**

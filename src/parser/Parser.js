@@ -5,71 +5,13 @@
 /// Imports
 
 
-import CharacterSet from '/src/model/CharacterSet.js';
-import Group from '/src/model/Group.js';
-import SelectorBase from '/src/model/SelectorBase.js';
-import Or from '/src/model/Or.js';
-import Quantifier from '/src/model/Quantifier.js';
-import { range } from '/src/utils/Range.js';
+import {CharacterSet} from '/src/model/CharacterSet.js';
+import {Group} from '/src/model/Group.js';
+import {SelectorBase} from '/src/model/SelectorBase.js';
+import {Or} from '/src/model/Or.js';
+import {Quantifier} from '/src/model/Quantifier.js';
+import {range} from '/src/utils/Range.js';
 
-
-/// Private type
-
-class ParseResult {
-
-	///Constructor
-
-	/**
-	 * Instanciates a ParseResult
-	 * @param {String} rest the string to be parsed
-	 * @param {SelectorBase} currentComponent the current component
-	 */
-	constructor(rest, currentComponent){
-		this._rest = rest;
-		this._component = currentComponent;
-	}
-
-	/// Properties
-
-	get Rest(){
-		return this._rest;
-	}
-	/**
-	 * @param {String} value
-	 */
-	set Rest(value){
-		this._rest = value;
-	}
-	get Component(){
-		return this._component;
-	}
-	/**
-	 * @param {SelectorBase} value
-	 */
-	set Component(value){
-		this._component = value;
-	}
-	
-	///Methods
-
-	/**
-	 * adds a component to the result
-	 * @param {SelectorBase} component the new component
-	 */
-	AddComponent(component) {
-		this.Component.AddComponent(component);
-	}
-
-	/**
-	 * Add a quantifier to the last component
-	 * @param {Quantifier} quantifier the quantifier to apply on the last component
-	 */
-	AddQuantifier(quantifier) {
-		const e = this.Component.Components.splice(this.Component.Components.length - 1, 1)[0];
-		quantifier.AddComponent(e);
-		this.AddComponent(quantifier);
-	}
-}
 
 /// Private methods
 
@@ -467,13 +409,12 @@ function ParseQuantifierLazy(result, quantifier) {
 }
 
 /// Class definition
-
-export default class Parser {
+export class Parser {
 	/**
-	 * Instanciates the regex parser
+	 * Creates an instance of the regex parser
 	 * @param {String} regex the regex string
 	 */
-	constructor(regex){
+	constructor(regex) {
 		this._regex = regex;
 	}
 
@@ -481,12 +422,72 @@ export default class Parser {
 	 * Parses the regex
 	 * @returns {Group} The parsed component
 	 */
-	Parse(){
+	Parse() {
 		const 
 			defaultComponent = new Group(),
 			result = new ParseResult(this._regex, defaultComponent);
 		ParseGroup(result);
 		console.log(result);
 		return result.Component;
+	}
+}
+
+/// Private type
+/**
+ * Container type for the parsed result
+ */
+class ParseResult {
+
+	///Constructor
+
+	/**
+	 * Instanciates a ParseResult
+	 * @param {String} rest the string to be parsed
+	 * @param {SelectorBase} currentComponent the current component
+	 */
+	constructor(rest, currentComponent){
+		this._rest = rest;
+		this._component = currentComponent;
+	}
+
+	/// Properties
+
+	get Rest(){
+		return this._rest;
+	}
+	/**
+	 * @param {String} value
+	 */
+	set Rest(value){
+		this._rest = value;
+	}
+	get Component(){
+		return this._component;
+	}
+	/**
+	 * @param {SelectorBase} value
+	 */
+	set Component(value){
+		this._component = value;
+	}
+	
+	///Methods
+
+	/**
+	 * adds a component to the result
+	 * @param {SelectorBase} component the new component
+	 */
+	AddComponent(component) {
+		this.Component.AddComponent(component);
+	}
+
+	/**
+	 * Add a quantifier to the last component
+	 * @param {Quantifier} quantifier the quantifier to apply on the last component
+	 */
+	AddQuantifier(quantifier) {
+		const e = this.Component.Components.splice(this.Component.Components.length - 1, 1)[0];
+		quantifier.AddComponent(e);
+		this.AddComponent(quantifier);
 	}
 }

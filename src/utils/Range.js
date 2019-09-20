@@ -6,7 +6,7 @@
  * @returns {Array<T>} A randomly picked list (or the complete list if the list was shorter then the number)
  * @template T
  */
-function pick(list, number){
+export function pick(list, number){
 	if(number >= list.length)
 		return list;
 	let 
@@ -32,7 +32,7 @@ function pick(list, number){
  * @param {Number} number the number of elements
  * @returns {Array<Number>} a list of numbers
  */
-function range(start, number) {
+export function range(start, number) {
 	return Array(number).fill().map((_, idx) => start + idx)
 }
 
@@ -42,13 +42,6 @@ function range(start, number) {
  * @param {string} end the ending character
  * @returns {Array<Number>} a list of charcodes
  */
-function rangeChars(start, end) {
+export function rangeChars(start, end) {
 	return ((f, t) => range(f, t - f + 1))(start.charCodeAt(0), end.charCodeAt(0));
 }
-
-export {
-	pick,
-	range,
-	rangeChars
-};
-

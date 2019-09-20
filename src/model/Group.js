@@ -1,14 +1,14 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
-import permute from '/src/generator/Permutator.js';
+import {SelectorBase} from './SelectorBase.js';
+import {permute} from '/src/generator/Permutator.js';
 
 /// Private methods
 
 
 /// Class
 
-export default class Group extends SelectorBase {
+export class Group extends SelectorBase {
 	
 	constructor(){
 		super();

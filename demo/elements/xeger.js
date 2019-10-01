@@ -10,6 +10,7 @@ import { Generator } from '/src/generator/Generator.js';
 import { Size, Diversity } from '/src/utils/Enums.js';
 import { GroupSequence } from '/src/utils/Enumerable.js';
 import { whitespaceMap } from '../whitespacemap.js';
+import { GeneratorConfig } from '/src/generator/GeneratorConfig.js';
 
 /// Constants
 const moduleName = 'xeger',
@@ -193,9 +194,8 @@ function onFormSubmitted(event) {
 		),
 		parser = new Parser(regex.value),
 		parsedComponent = parser.Parse(),
-		generator = new Generator(parsedComponent),
-		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
-		//possibilities = generator.Generate(sizeOption, diversityOption);
+		generator = new Generator(parsedComponent, GeneratorConfig.Default),
+		possibilities = generator.Generate(sizeOption, diversityOption);
 
 	console.log(possibilities);
 

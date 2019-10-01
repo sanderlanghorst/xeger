@@ -5,7 +5,7 @@
  * @template T
  */
 function* FromArray(source) {
-	for(let element of source){
+	for (let element of source) {
 		yield element;
 	}
 }
@@ -13,28 +13,24 @@ function* FromArray(source) {
 /**
  * Groups a list by given sequence
  * @param {Array<T>} source the list to group
- * @param {SequenceSelector} sequenceSelector
- * @returns {Array<Array<T>>}
+ * @param {SequenceSelector<T>} sequenceSelector
+ * @returns {IterableIterator<Array<T>>}
  * @template T the type of the element
  */
-export function* GroupSequence(source, sequenceSelector)
-{
+export function* GroupSequence(source, sequenceSelector) {
 	if (source == null || !source.length) {
 		return;
 	}
-	
+
 	const iterator = FromArray(source);
-	
+
 	let element = iterator.next().value;
 	let elements = [element];
 	let next = iterator.next();
-	while (!next.done)
-	{
+	while (!next.done) {
 		const item = next.value;
-		if (sequenceSelector(element, item))
-			elements.push(item);
-		else
-		{
+		if (sequenceSelector(element, item)) elements.push(item);
+		else {
 			yield elements;
 			elements = [item];
 		}
@@ -45,7 +41,6 @@ export function* GroupSequence(source, sequenceSelector)
 
 	yield elements;
 }
-
 
 /**
  * @callback SequenceSelector

@@ -3,8 +3,14 @@
 		"target": "es6",
 		"baseUrl": ".",
 		"paths": {
-			"/src/*": ["src/*"]
+			"/src/*": [
+				"src/*"
+			]
 		},
-		"checkJs": true
+		"checkJs": true,
+		"lib": [
+			"dom",
+			"es2019"
+		  ]
 	}
 }

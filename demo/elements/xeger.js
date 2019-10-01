@@ -5,15 +5,14 @@
 
 /// Imports
 
-import {Parser} from '/src/parser/Parser.js';
-import {Size, Diversity} from '/src/utils/Enums.js';
-import {GroupSequence} from '/src/utils/Enumerable.js';
-import {whitespaceMap} from '../whitespacemap.js';
-
+import { Parser } from '/src/parser/Parser.js';
+import { Generator } from '/src/generator/Generator.js';
+import { Size, Diversity } from '/src/utils/Enums.js';
+import { GroupSequence } from '/src/utils/Enumerable.js';
+import { whitespaceMap } from '../whitespacemap.js';
 
 /// Constants
-const
-	moduleName = 'xeger',
+const moduleName = 'xeger',
 	selectors = {
 		base: `.js-${moduleName}`,
 		diversity: `.js-${moduleName}-diversity`,
@@ -25,8 +24,7 @@ const
 	};
 
 /// Privates
-let
-	baseElement = null;
+let baseElement = null;
 
 /**
  * Formats the whitespaces of the string
@@ -35,31 +33,40 @@ let
  */
 function formatWhitespace(string) {
 	const elements = [];
-	
+
 	/**@type {Array<Array<String>>} */
-	const grouping = GroupSequence(string, (l,r) => whitespaceMap.has(l.charCodeAt(0)) === whitespaceMap.has(r.charCodeAt(0)));
+	const grouping = GroupSequence(
+		// @ts-ignore
+		string,
+		(l, r) =>
+			whitespaceMap.has(l.charCodeAt(0)) ===
+			whitespaceMap.has(r.charCodeAt(0))
+	);
+
 	for (let g of grouping) {
-		if(whitespaceMap.has(g[0].charCodeAt(0))) {
+		if (whitespaceMap.has(g[0].charCodeAt(0))) {
 			const span = document.createElement('span');
 			span.classList.add('whitespace');
-			span.innerText = g.map(e => whitespaceMap.get(e.charCodeAt(0))).join('');
+			span.innerText = g
+				.map(e => whitespaceMap.get(e.charCodeAt(0)))
+				.join('');
 			elements.push(span);
 		} else {
 			elements.push(document.createTextNode(g.join('')));
 		}
 	}
-	
+
 	return elements;
 }
 
 /**
  * @returns {Symbol} The selected diversity
  */
-function getDiversityOption(){
-	const
-		diversity = baseElement.querySelector(selectors.diversity),
+function getDiversityOption() {
+	const diversity = baseElement.querySelector(selectors.diversity),
 		diversityValue = diversity == null ? 0 : diversity.value;
-	switch(diversityValue){
+
+	switch (diversityValue) {
 		case '1':
 			return Diversity.Simple;
 		case '2':
@@ -69,15 +76,15 @@ function getDiversityOption(){
 	}
 	return Diversity.Simple;
 }
-	
+
 /**
  * @returns {Symbol} Size
  */
-function getSizeOption(){
-	const
-		size = baseElement.querySelector(selectors.size),
+function getSizeOption() {
+	const size = baseElement.querySelector(selectors.size),
 		sizeValue = size == null ? 0 : size.value;
-	switch(sizeValue){
+
+	switch (sizeValue) {
 		case '1':
 			return Size.Small;
 		case '2':
@@ -92,16 +99,14 @@ function getSizeOption(){
 
 /**
  * initializes the listeners
- * @param {HtmlElement} element the xeger element
+ * @param {HTMLElement} element the xeger element
  */
-function initXeger(element){
+function initXeger(element) {
 	baseElement = element;
 
-	const 
-		form = baseElement.querySelector(selectors.form),
+	const form = baseElement.querySelector(selectors.form),
 		regex = baseElement.querySelector(selectors.regex);
-	if(form === null)
-		return;
+	if (form === null) return;
 
 	form.addEventListener('submit', onFormSubmitted);
 	regex.addEventListener('input', onRegexInputed);
@@ -109,12 +114,12 @@ function initXeger(element){
 
 /**
  * exported init
- * @param {Array<HTMLElement>} elements the selected elements
+ * @param {NodeListOf<HTMLElement>} elements the selected elements
  */
 function init(elements = document.querySelectorAll(selectors.base)) {
-	if(elements === null || elements === undefined || elements.length == 0)
+	if (elements === null || elements === undefined || elements.length == 0)
 		return;
-	
+
 	initXeger(elements[0]);
 }
 
@@ -124,21 +129,21 @@ function init(elements = document.querySelectorAll(selectors.base)) {
  * @param {String} regex the regex
  * @param {Boolean} format wether to format the whitespaces
  */
-function setResult(possibilities, regex, format){
-	const
-		resultElement = baseElement.querySelector(selectors.result),
+function setResult(possibilities, regex, format) {
+	const resultElement = baseElement.querySelector(selectors.result),
 		ul = document.createElement('ul');
-	
+
 	resultElement.innerHTML = '';
 
 	possibilities.sort().forEach(p => {
-		const
-			listElement = document.createElement('li'),
+		const listElement = document.createElement('li'),
 			matches = new RegExp(regex).test(p),
-			formattedElements = format ? formatWhitespace(p) : [document.createTextNode(p)],
+			formattedElements = format
+				? formatWhitespace(p)
+				: [document.createTextNode(p)],
 			emElement = document.createElement('em');
 		formattedElements.forEach(f => emElement.appendChild(f));
-		
+
 		listElement.append(matches ? '✔️' : '❌');
 		listElement.appendChild(emElement);
 		ul.appendChild(listElement);
@@ -148,22 +153,20 @@ function setResult(possibilities, regex, format){
 
 /**
  * Validates the input and sets validity properties
- * @param {HtmlInputElement} regex the regex input
+ * @param {HTMLInputElement} regex the regex input
  */
-function validateInput(regex){
-	try{
-		if(regex === null || regex === undefined || regex.value === '')
+function validateInput(regex) {
+	try {
+		if (regex === null || regex === undefined || regex.value === '')
 			throw 'Input is empty, infinite matches!';
-		
+
 		new RegExp(regex.value);
 		regex.setCustomValidity('');
 		return true;
-	}
-	catch(e){
+	} catch (e) {
 		regex.setCustomValidity(`${e}`);
 		return false;
-	}
-	finally{
+	} finally {
 		regex.form.reportValidity();
 	}
 }
@@ -174,24 +177,26 @@ function validateInput(regex){
  * handles the generate button click
  * @param {MouseEvent} event the mouse event
  */
-function onFormSubmitted(event){
-	const
-		regex = baseElement.querySelector(selectors.regex);
-	
+function onFormSubmitted(event) {
+	const regex = baseElement.querySelector(selectors.regex);
+
 	event.preventDefault();
 
-	if(!validateInput(regex)){
+	if (!validateInput(regex)) {
 		return;
 	}
 
-	const
-		sizeOption = getSizeOption(),
+	const sizeOption = getSizeOption(),
 		diversityOption = getDiversityOption(),
-		format = ((checkbox) => checkbox ? checkbox.checked : false)(baseElement.querySelector(selectors.format)),
+		format = (checkbox => (checkbox ? checkbox.checked : false))(
+			baseElement.querySelector(selectors.format)
+		),
 		parser = new Parser(regex.value),
 		parsedComponent = parser.Parse(),
+		generator = new Generator(parsedComponent),
 		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
-	
+		//possibilities = generator.Generate(sizeOption, diversityOption);
+
 	console.log(possibilities);
 
 	setResult(possibilities, regex.value, format);
@@ -201,14 +206,12 @@ function onFormSubmitted(event){
  * handles the input on the regex field
  * @param {InputEvent} event the input event
  */
-function onRegexInputed(event){
-	if(!validateInput(event.target)){
+function onRegexInputed(event) {
+	if (!validateInput(event.target)) {
 		return;
 	}
 }
 
 /// Export
 
-export {
-	init
-};
+export { init };

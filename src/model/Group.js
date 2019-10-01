@@ -1,16 +1,14 @@
 /// Imports
 
-import {SelectorBase} from './SelectorBase.js';
-import {permute} from '/src/generator/Permutator.js';
+import { SelectorBase } from './SelectorBase.js';
+import { permute } from '/src/generator/Permutator.js';
 
 /// Private methods
-
 
 /// Class
 
 export class Group extends SelectorBase {
-	
-	constructor(){
+	constructor() {
 		super();
 
 		/** @type {Array<SelectorBase>} */
@@ -54,8 +52,9 @@ export class Group extends SelectorBase {
 	 * @returns {Array<String>} The array
 	 */
 	GetSelection(size, diversity) {
-		const
-			selection = this._components.map(c => c.GetSelection(size, diversity)),
+		const selection = this._components.map(c =>
+				c.GetSelection(size, diversity)
+			),
 			result = permute(selection, size);
 		return result;
 	}

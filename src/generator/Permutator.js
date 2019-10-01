@@ -1,15 +1,13 @@
 /// Imports
 
-import { Size } from '/src/utils/Enums.js';
+import { Size } from '../utils/Enums.js';
 
-const sizes = {
-	totalSize: {
-		[Size.Small]: 6,
-		[Size.Medium]: 10,
-		[Size.Large]: 20,
-		[Size.Insane]: 100
-	}
-}
+const totalSize = {
+	[Size.Small]: 6,
+	[Size.Medium]: 10,
+	[Size.Large]: 20,
+	[Size.Insane]: 100
+};
 
 /// Exports
 
@@ -20,34 +18,34 @@ const sizes = {
  * @returns {Array<String>}
  */
 export function permute(list, size) {
-	const workingList = list.map(l => l.filter(i => i !== undefined || i !== '')).filter(l => l.length > 0);
-	if(!workingList.length){
+	const workingList = list
+		.map(l => l.filter(i => i !== undefined || i !== ''))
+		.filter(l => l.length > 0);
+	if (!workingList.length) {
 		return [];
 	}
-	if(workingList.length === 1){
-		return workingList.reduce((a,s) => `${a}${s}`);
+	if (workingList.length === 1) {
+		return workingList.reduce((a, s) => `${a}${s}`);
 	}
-	
-	let 
-		maxSize = workingList.reduce((a, s) => a * s.length, 1),
+
+	let maxSize = workingList.reduce((a, s) => a * s.length, 1),
 		skipSize = maxSize;
 
-	const
-		max = sizes.totalSize[size],
+	const max = totalSize[size],
 		sizeDiff = maxSize / Math.min(maxSize, max),
 		output = [];
 
-	skipSize = maxSize = Math.min(maxSize, max)
+	skipSize = maxSize = Math.min(maxSize, max);
 
-	for(let s = 0; s < workingList.length; s++){
-
+	for (let s = 0; s < workingList.length; s++) {
 		skipSize = (skipSize * sizeDiff) / workingList[s].length / sizeDiff;
-		
-		for(let i = 0; i < maxSize; i++){
-			var p = Math.floor(i / skipSize) + Math.floor(Math.random() * 1.0 / skipSize);
-			
-			if(output[i] === undefined)
-				output[i] = '';
+
+		for (let i = 0; i < maxSize; i++) {
+			var p =
+				Math.floor(i / skipSize) +
+				Math.floor((Math.random() * 1.0) / skipSize);
+
+			if (output[i] === undefined) output[i] = '';
 			output[i] = output[i] + workingList[s][p % workingList[s].length];
 		}
 	}

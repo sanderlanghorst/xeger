@@ -4,14 +4,12 @@
 
 /// Imports
 
-
-import {CharacterSet} from '/src/model/CharacterSet.js';
-import {Group} from '/src/model/Group.js';
-import {SelectorBase} from '/src/model/SelectorBase.js';
-import {Or} from '/src/model/Or.js';
-import {Quantifier} from '/src/model/Quantifier.js';
-import {range} from '/src/utils/Range.js';
-
+import { CharacterSet } from '/src/model/CharacterSet.js';
+import { Group } from '/src/model/Group.js';
+import { SelectorBase } from '/src/model/SelectorBase.js';
+import { Or } from '/src/model/Or.js';
+import { Quantifier } from '/src/model/Quantifier.js';
+import { range } from '/src/utils/Range.js';
 
 /// Private methods
 
@@ -21,8 +19,7 @@ import {range} from '/src/utils/Range.js';
  * @returns {String} the consumed character
  */
 function consume(result) {
-	const
-		c = result.Rest.charAt(0);
+	const c = result.Rest.charAt(0);
 	result.Rest = result.Rest.slice(1, result.Rest.length);
 	return c;
 }
@@ -39,12 +36,10 @@ function peek(result) {
 /**
  * parses the escaped character
  * @param {ParseResult} result the current parsed result
- * @param {CharacterSet} the escaped set
  */
 function ParseEscaped(result) {
-	const
-		char = consume(result);
-	switch(char) {
+	const char = consume(result);
+	switch (char) {
 		//shorthands
 		case 'd':
 			result.AddComponent(new CharacterSet(CharacterSet.DigitSet));
@@ -67,7 +62,9 @@ function ParseEscaped(result) {
 			break;
 
 		case 'S':
-			result.AddComponent(CharacterSet.FromNegate(CharacterSet.WhitespaceSet));
+			result.AddComponent(
+				CharacterSet.FromNegate(CharacterSet.WhitespaceSet)
+			);
 			break;
 
 		case 'r':
@@ -75,7 +72,7 @@ function ParseEscaped(result) {
 			break;
 
 		case 'n':
-			result.AddComponent( CharacterSet.FromCharacter('\n'));
+			result.AddComponent(CharacterSet.FromCharacter('\n'));
 			break;
 
 		case 't':
@@ -85,20 +82,22 @@ function ParseEscaped(result) {
 		case 'f':
 			result.AddComponent(CharacterSet.FromCharacter('\f'));
 			break;
-			
+
 		case 'c': //ASCII control character (A-Z)
 			break;
 
-		case 'x': { //ASCII character (01-FF)
-			if(ParseHex(result, 2, false)) {
+		case 'x': {
+			//ASCII character (01-FF)
+			if (ParseHex(result, 2, false)) {
 				return;
 			}
 			result.AddComponent(CharacterSet.FromCharacter(char));
 			break;
 		}
 
-		case 'u': { //Unicode character (0000-FFFF)
-			if(ParseHex(result, 4, true)) {
+		case 'u': {
+			//Unicode character (0000-FFFF)
+			if (ParseHex(result, 4, true)) {
 				return;
 			}
 			result.AddComponent(CharacterSet.FromCharacter(char));
@@ -115,17 +114,14 @@ function ParseEscaped(result) {
  * @param {ParseResult} result the current parsed result
  */
 function ParseGroup(result) {
-	while(result.Rest.length) {
-		const 
-			char = consume(result);
+	while (result.Rest.length) {
+		const char = consume(result);
 
-		switch(char){
-			case '(':{
+		switch (char) {
+			case '(': {
 				//new group
-				const
-					g = GetGroupStart(result);
-				let
-					r = new ParseResult(result.Rest, g);
+				const g = GetGroupStart(result);
+				let r = new ParseResult(result.Rest, g);
 				ParseGroup(r);
 				result.Rest = r.Rest;
 				result.AddComponent(r.Component);
@@ -135,20 +131,18 @@ function ParseGroup(result) {
 			case ')':
 				//close group
 				return;
-			
+
 			case '[':
 				//character set
 				ParseSet(result);
 				break;
 
 			case '|': {
-				const
-					or = new Or(),
+				const or = new Or(),
 					right = new Group();
 				or.AddComponent(result.Component);
 				result.Component = or;
-				let
-					r = new ParseResult(result.Rest, right);
+				let r = new ParseResult(result.Rest, right);
 				ParseGroup(r);
 				result.Rest = r.Rest;
 				or.AddComponent(r.Component);
@@ -159,10 +153,10 @@ function ParseGroup(result) {
 				result.AddComponent(CharacterSet.FromRange(0, 1279));
 				break;
 
-			case '*': 
+			case '*':
 				ParseQuantifier(result, 0, 100);
 				break;
-			
+
 			case '+':
 				ParseQuantifier(result, 1, 100);
 				break;
@@ -170,7 +164,7 @@ function ParseGroup(result) {
 			case '?':
 				ParseQuantifier(result, 0, 1);
 				break;
-			
+
 			case '{':
 				ParseQuantifierRange(result);
 				break;
@@ -178,7 +172,7 @@ function ParseGroup(result) {
 			case '^':
 			case '$':
 				break;
-			
+
 			case '\\':
 				ParseEscaped(result);
 				break;
@@ -202,7 +196,7 @@ function GetGroupStart(result) {
 	if (peek(result) === '?') {
 		//non-capture or lookaround
 		consume(result);
-		switch(consume(result)){
+		switch (consume(result)) {
 			case ':':
 				//non-capturing
 				break;
@@ -210,14 +204,14 @@ function GetGroupStart(result) {
 			case '<': {
 				//lookbehind
 				//check ! or =
-				switch(consume(result)) {
+				switch (consume(result)) {
 					case '=':
-					//positive lookbehind
-					break;
+						//positive lookbehind
+						break;
 
-				case '!':
-					//negative lookbehind
-					break;
+					case '!':
+						//negative lookbehind
+						break;
 				}
 				break;
 			}
@@ -242,16 +236,16 @@ function GetGroupStart(result) {
  * @returns {Boolean} whether the parse has succeeded
  */
 function ParseHex(result, maxNumber, isExact) {
-	const seperateResult = new ParseResult(result.Rest, result.Component)
+	const seperateResult = new ParseResult(result.Rest, result.Component);
 	let parsed = '';
-	for(let i = 0; i < maxNumber; i++) {
-		if(!Number.isNaN(parseInt(peek(seperateResult), 16))) {
+	for (let i = 0; i < maxNumber; i++) {
+		if (!Number.isNaN(parseInt(peek(seperateResult), 16))) {
 			parsed += consume(seperateResult);
 		} else {
 			break;
 		}
 	}
-	if(parsed !== '' && !isExact || parsed.length === maxNumber) {
+	if ((parsed !== '' && !isExact) || parsed.length === maxNumber) {
 		result.Rest = seperateResult.Rest;
 		const characterSet = new CharacterSet([parseInt(parsed, 16)]);
 		result.AddComponent(characterSet);
@@ -264,40 +258,34 @@ function ParseHex(result, maxNumber, isExact) {
  * parses the character set
  * @param {ParseResult} result the current parsed result
  */
-function ParseSet(result){
-	const 
-		negate = peek(result) === '^',
+function ParseSet(result) {
+	const negate = peek(result) === '^',
 		/**@type {Array<Number>} */
 		sets = [];
-	let
-		rangeFrom = null,
+	let rangeFrom = null,
 		rangeSet = false;
 
-	const addChar = (charCode) => {
-		if(rangeSet) {
-			range(rangeFrom, charCode - rangeFrom)
-				.forEach(i => sets.push(i));
+	const addChar = charCode => {
+		if (rangeSet) {
+			range(rangeFrom, charCode - rangeFrom).forEach(i => sets.push(i));
 			sets.push(charCode);
 			rangeFrom = null;
 		} else {
-			if(rangeFrom !== null)
-				sets.push(rangeFrom);
+			if (rangeFrom !== null) sets.push(rangeFrom);
 			rangeFrom = charCode;
 		}
 		rangeSet = false;
 	};
 
-	if(negate)
-		consume(result);
+	if (negate) consume(result);
 
-	while(result.Rest.length) {
-		const
-			char = consume(result);
+	while (result.Rest.length) {
+		const char = consume(result);
 		let charCode = char.charCodeAt(0);
 
-		switch(char){
+		switch (char) {
 			case '-':
-				if(rangeFrom !== null) {
+				if (rangeFrom !== null) {
 					rangeSet = true;
 				} else {
 					addChar(charCode);
@@ -305,26 +293,29 @@ function ParseSet(result){
 				break;
 
 			case ']':
-				if(rangeFrom !== null)
-					sets.push(rangeFrom);
+				if (rangeFrom !== null) sets.push(rangeFrom);
 
-				result.AddComponent(negate 
-									? CharacterSet.FromNegate(sets)
-									: new CharacterSet(sets));
+				result.AddComponent(
+					negate
+						? CharacterSet.FromNegate(sets)
+						: new CharacterSet(sets)
+				);
 				return;
-			
-			case '\\': 
-				const seperateResult = new ParseResult(result.Rest, new Group());
+
+			case '\\':
+				const seperateResult = new ParseResult(
+					result.Rest,
+					new Group()
+				);
 				ParseEscaped(seperateResult);
 				result.Rest = seperateResult.Rest;
 				charCode = seperateResult.Component.Components[0].Set[0];
-			
+
 			default:
 				addChar(charCode);
-				
+
 				break;
 		}
-
 	}
 }
 
@@ -335,8 +326,7 @@ function ParseSet(result){
  * @param {Number} max the maxium
  */
 function ParseQuantifier(result, min, max) {
-	const
-		q = new Quantifier(min, max);
+	const q = new Quantifier(min, max);
 	result.AddQuantifier(q);
 	ParseQuantifierLazy(result, q);
 }
@@ -346,16 +336,14 @@ function ParseQuantifier(result, min, max) {
  * @param {ParseResult} result The current parsed result
  */
 function ParseQuantifierRange(result) {
-	let
-		fromSet = false,
+	let fromSet = false,
 		rangeFrom = '',
 		rangeTo = '';
 	const quantifierResult = new ParseResult(result.Rest, result.Component);
 
-	while(quantifierResult.Rest.length) {
-		const
-			char = consume(quantifierResult);
-		switch(char){
+	while (quantifierResult.Rest.length) {
+		const char = consume(quantifierResult);
+		switch (char) {
 			case ',':
 				fromSet = true;
 				break;
@@ -365,11 +353,14 @@ function ParseQuantifierRange(result) {
 				/**@type {Quantifier} */
 				let q;
 				//quantifier: single, range endless, range
-				if(!fromSet) {
+				if (!fromSet) {
 					q = new Quantifier(fromInt, fromInt);
-				} else if(rangeTo === '') {
+				} else if (rangeTo === '') {
 					//if the range from is already high, only add a bit
-					q = new Quantifier(fromInt, fromInt > 100 ? fromInt + 10 : 100);
+					q = new Quantifier(
+						fromInt,
+						fromInt > 100 ? fromInt + 10 : 100
+					);
 				} else {
 					const toInt = parseInt(rangeTo, 10);
 					q = new Quantifier(fromInt, toInt);
@@ -378,15 +369,16 @@ function ParseQuantifierRange(result) {
 				ParseQuantifierLazy(quantifierResult, q);
 				result.Rest = quantifierResult.Rest;
 				result.Component = quantifierResult.Component;
-				
+
 				return;
-			
+
 			default:
-				if(!char.match(/\d/)) { //not a range
+				if (!char.match(/\d/)) {
+					//not a range
 					result.AddComponent(CharacterSet.FromCharacter('{'));
 					return;
 				}
-				if(!fromSet) {
+				if (!fromSet) {
 					rangeFrom = rangeFrom.concat(char);
 				} else {
 					rangeTo = rangeTo.concat(char);
@@ -402,7 +394,7 @@ function ParseQuantifierRange(result) {
  * @param {Quantifier} quantifier The quantifier result
  */
 function ParseQuantifierLazy(result, quantifier) {
-	if(peek(result) === '?') {
+	if (peek(result) === '?') {
 		consume(result);
 		quantifier.MakeLazy();
 	}
@@ -420,11 +412,10 @@ export class Parser {
 
 	/**
 	 * Parses the regex
-	 * @returns {Group} The parsed component
+	 * @returns {SelectorBase} The parsed component
 	 */
 	Parse() {
-		const 
-			defaultComponent = new Group(),
+		const defaultComponent = new Group(),
 			result = new ParseResult(this._regex, defaultComponent);
 		ParseGroup(result);
 		console.log(result);
@@ -437,7 +428,6 @@ export class Parser {
  * Container type for the parsed result
  */
 class ParseResult {
-
 	///Constructor
 
 	/**
@@ -445,32 +435,32 @@ class ParseResult {
 	 * @param {String} rest the string to be parsed
 	 * @param {SelectorBase} currentComponent the current component
 	 */
-	constructor(rest, currentComponent){
+	constructor(rest, currentComponent) {
 		this._rest = rest;
 		this._component = currentComponent;
 	}
 
 	/// Properties
 
-	get Rest(){
+	get Rest() {
 		return this._rest;
 	}
 	/**
 	 * @param {String} value
 	 */
-	set Rest(value){
+	set Rest(value) {
 		this._rest = value;
 	}
-	get Component(){
+	get Component() {
 		return this._component;
 	}
 	/**
 	 * @param {SelectorBase} value
 	 */
-	set Component(value){
+	set Component(value) {
 		this._component = value;
 	}
-	
+
 	///Methods
 
 	/**
@@ -486,7 +476,10 @@ class ParseResult {
 	 * @param {Quantifier} quantifier the quantifier to apply on the last component
 	 */
 	AddQuantifier(quantifier) {
-		const e = this.Component.Components.splice(this.Component.Components.length - 1, 1)[0];
+		const e = this.Component.Components.splice(
+			this.Component.Components.length - 1,
+			1
+		)[0];
 		quantifier.AddComponent(e);
 		this.AddComponent(quantifier);
 	}

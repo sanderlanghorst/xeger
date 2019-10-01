@@ -1,25 +1,22 @@
 /// Imports
 
-import {SelectorBase} from './SelectorBase.js';
+import { SelectorBase } from './SelectorBase.js';
 import { Size, Diversity } from '/src/utils/Enums.js';
 import { range, rangeChars, pick } from '/src/utils/Range.js';
 
-const
-	diversitySets = {
-		[Diversity.Simple]:range(65, 26).concat(range(97, 26)), //65 'A'
-		[Diversity.Random]:range(32, 95),
-		[Diversity.Insane]:[]
+const diversitySets = {
+		[Diversity.Simple]: range(65, 26).concat(range(97, 26)), //65 'A'
+		[Diversity.Random]: range(32, 95),
+		[Diversity.Insane]: []
 	},
-	
 	predefinedSets = {
 		digits: rangeChars('0', '9'),
 		whitespaces: [9, 10, 12, 13, 32],
 		word: rangeChars('A', 'Z')
-				.concat(rangeChars('a','z'))
-				.concat(rangeChars('0','9'))
-				.concat(['_'.charCodeAt(0)]),
+			.concat(rangeChars('a', 'z'))
+			.concat(rangeChars('0', '9'))
+			.concat(['_'.charCodeAt(0)])
 	},
-
 	sizes = {
 		[Size.Small]: 3,
 		[Size.Medium]: 6,
@@ -27,26 +24,24 @@ const
 		[Size.Insane]: 100
 	};
 
-
 /**
  * A character set
  */
 export class CharacterSet extends SelectorBase {
-
 	/**
 	 * a characterset with a defined set
 	 * @param {Array<Number>} set a defined set
 	 */
-	constructor(set){
+	constructor(set) {
 		super();
 
 		this._set = set;
 	}
 
 	/// Properties
-	
+
 	/**@inheritdoc */
-	get Components(){
+	get Components() {
 		return [];
 	}
 
@@ -61,19 +56,17 @@ export class CharacterSet extends SelectorBase {
 
 	/**
 	 * GetSelection
-	 * @param size {Size} the size
-	 * @param diversity {Diversity} the diversity
+	 * @param {Symbol} size the size
+	 * @param {Symbol} diversity the diversity
 	 * @returns {Array<String>} The array
 	 */
 	GetSelection(size, diversity) {
-		/**@type {Array<String>} */
-		const 
-			preSet = diversitySets[diversity],
+		/**@type {Array<Number>} */
+		const preSet = diversitySets[diversity],
 			sub = this._set.filter(char => preSet.some(r => r === char)),
 			result = sub.length ? sub : this._set;
-		
-		return pick(result, sizes[size])
-					.map(r => String.fromCharCode(r));
+
+		return pick(result, sizes[size]).map(r => String.fromCharCode(r));
 	}
 
 	/// Static Properties
@@ -102,14 +95,13 @@ export class CharacterSet extends SelectorBase {
 		return predefinedSets.word;
 	}
 
-	
 	/// Static Methods
 
 	/**
 	 * Creates a new instance of Character with a character
 	 * @param {String} character the character
 	 */
-	static FromCharacter(character){
+	static FromCharacter(character) {
 		return new CharacterSet([character.charCodeAt(0)]);
 	}
 
@@ -117,8 +109,11 @@ export class CharacterSet extends SelectorBase {
 	 * gets a characters set based on the predefined sets without this set
 	 * @param {Array<Number>} set a negated character set
 	 */
-	static FromNegate(set){
-		return new CharacterSet(diversitySets[Diversity.Random].filter(p => !set.some(s => s === p)));
+	static FromNegate(set) {
+		// @ts-ignore
+		return new CharacterSet(
+			diversitySets[Diversity.Random].filter(p => !set.some(s => s === p))
+		);
 	}
 
 	/**
@@ -126,7 +121,7 @@ export class CharacterSet extends SelectorBase {
 	 * @param {Number} from charcode
 	 * @param {Number} to charcode
 	 */
-	static FromRange(from, to){
-		return new CharacterSet(range(from, to-from));
+	static FromRange(from, to) {
+		return new CharacterSet(range(from, to - from));
 	}
 }

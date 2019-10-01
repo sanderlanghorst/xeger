@@ -1,44 +1,42 @@
 /// Imports
 
-import {SelectorBase} from './SelectorBase.js';
-import {pick, range} from '/src/utils/Range.js';
+import { SelectorBase } from './SelectorBase.js';
+import { pick, range } from '/src/utils/Range.js';
 import { Size, Diversity } from '/src/utils/Enums.js';
-import {permute} from '/src/generator/Permutator.js';
+import { permute } from '/src/generator/Permutator.js';
 
 /// Privates
 
-const
-	diversityNumbers = {
-		[Diversity.Simple] : 6,
-		[Diversity.Random] : 10,
-		[Diversity.Insane] : 20
+const diversityNumbers = {
+		[Diversity.Simple]: 6,
+		[Diversity.Random]: 10,
+		[Diversity.Insane]: 20
 	},
 	sizeNumbers = {
 		[Size.Small]: 0.1,
 		[Size.Medium]: 0.5,
 		[Size.Large]: 0.8,
 		[Size.Insane]: 1
-	}
+	};
 
 /// Class
 
 export class Quantifier extends SelectorBase {
-	
 	/**
 	 * Instanciates a Quantifier selector
 	 * @param {Number} min the minimum occurance
 	 * @param {Number} max the maximum occurance
 	 */
-	constructor(min, max){
+	constructor(min, max) {
 		super();
 
 		/** @type {Number} */
-		this._min = parseInt(min, 10);
+		this._min = min;
 
 		/** @type {Number} */
-		this._max = parseInt(max, 10);
+		this._max = max;
 
-		/** @type {Array<SelectorBase>} */
+		/** @type {SelectorBase} */
 		this._component = null;
 	}
 
@@ -47,8 +45,8 @@ export class Quantifier extends SelectorBase {
 	/**
 	 * @inheritdoc
 	 */
-	get Components(){
-		return [_components];
+	get Components() {
+		return [this._component];
 	}
 
 	/// Methods
@@ -58,7 +56,7 @@ export class Quantifier extends SelectorBase {
 	 * adds a component to the group
 	 * @param {SelectorBase} component the new component
 	 */
-	AddComponent(component){
+	AddComponent(component) {
 		this._component = component;
 	}
 
@@ -68,21 +66,21 @@ export class Quantifier extends SelectorBase {
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity){
-		const
-			pickNumber = diversityNumbers[diversity],
+	GetSelection(size, diversity) {
+		const pickNumber = diversityNumbers[diversity],
 			sizeNumber = sizeNumbers[size];
-		
-		const
-			numberOfResults = pick(
-				range(this._min, this._max - this._min + 1)
-					.map(i => ((i - this._min) * sizeNumber) + this._min),
-				pickNumber),
+
+		const numberOfResults = pick(
+				range(this._min, this._max - this._min + 1).map(
+					i => (i - this._min) * sizeNumber + this._min
+				),
+				pickNumber
+			),
 			results = [];
-			
-		for(let nor of numberOfResults){
+
+		for (let nor of numberOfResults) {
 			const subResults = [['']];
-			for(let n = 0; n < nor; n++){
+			for (let n = 0; n < nor; n++) {
 				subResults.push(this._component.GetSelection(size, diversity));
 			}
 			results.push(subResults);

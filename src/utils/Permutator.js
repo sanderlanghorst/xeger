@@ -1,6 +1,6 @@
 /// Imports
 
-import { Size } from '../utils/Enums.js';
+import { Size } from './Enums.js';
 
 const totalSize = {
 	[Size.Small]: 6,

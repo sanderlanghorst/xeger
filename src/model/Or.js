@@ -50,10 +50,10 @@ export class Or extends SelectorBase {
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity) {
+	Generate(size, diversity) {
 		return [
-			this._left.GetSelection(size, diversity),
-			this._right.GetSelection(size, diversity)
+			this._left.Generate(size, diversity),
+			this._right.Generate(size, diversity)
 		].flatMap(m => m);
 	}
 }

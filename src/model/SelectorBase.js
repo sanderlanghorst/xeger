@@ -23,12 +23,12 @@ export class SelectorBase {
 	}
 
 	/**
-	 * GetSelection
+	 * Generates output
 	 * @param size {Symbol} the size
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity) {
+	Generate(size, diversity) {
 		throw 'Cannot call abstract method';
 	}
 }

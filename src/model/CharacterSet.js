@@ -55,12 +55,12 @@ export class CharacterSet extends SelectorBase {
 	/// Methods
 
 	/**
-	 * GetSelection
+	 * Generate
 	 * @param {Symbol} size the size
 	 * @param {Symbol} diversity the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity) {
+	Generate(size, diversity) {
 		/**@type {Array<Number>} */
 		const preSet = diversitySets[diversity],
 			sub = this._set.filter(char => preSet.some(r => r === char)),

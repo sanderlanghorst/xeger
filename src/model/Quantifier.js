@@ -3,7 +3,7 @@
 import { SelectorBase } from './SelectorBase.js';
 import { pick, range } from '/src/utils/Range.js';
 import { Size, Diversity } from '/src/utils/Enums.js';
-import { permute } from '/src/generator/Permutator.js';
+import { permute } from '../utils/Permutator.js';
 
 /// Privates
 
@@ -66,7 +66,7 @@ export class Quantifier extends SelectorBase {
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity) {
+	Generate(size, diversity) {
 		const pickNumber = diversityNumbers[diversity],
 			sizeNumber = sizeNumbers[size];
 
@@ -81,7 +81,7 @@ export class Quantifier extends SelectorBase {
 		for (let nor of numberOfResults) {
 			const subResults = [['']];
 			for (let n = 0; n < nor; n++) {
-				subResults.push(this._component.GetSelection(size, diversity));
+				subResults.push(this._component.Generate(size, diversity));
 			}
 			results.push(subResults);
 		}

@@ -1,7 +1,7 @@
 /// Imports
 
 import { SelectorBase } from './SelectorBase.js';
-import { permute } from '/src/generator/Permutator.js';
+import { permute } from '../utils/Permutator.js';
 
 /// Private methods
 
@@ -46,14 +46,14 @@ export class Group extends SelectorBase {
 	}
 
 	/**
-	 * GetSelection
+	 * Generate
 	 * @param size {Symbol} the size
 	 * @param diversity {Symbol} the diversity
 	 * @returns {Array<String>} The array
 	 */
-	GetSelection(size, diversity) {
+	Generate(size, diversity) {
 		const selection = this._components.map(c =>
-				c.GetSelection(size, diversity)
+				c.Generate(size, diversity)
 			),
 			result = permute(selection, size);
 		return result;

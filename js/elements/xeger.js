@@ -8,6 +8,7 @@
 import Parser from '../Parser.js';
 import {Size, Diversity} from '../Enums.js';
 import {GroupSequence} from '../utils/Enumerable.js';
+import ResultContext from '../results/ResultContext.js';
 
 
 /// Constants
@@ -195,9 +196,18 @@ function onFormSubmitted(event){
 		format = ((checkbox) => checkbox ? checkbox.checked : false)(baseElement.querySelector(selectors.format)),
 		parser = new Parser(regex.value),
 		parsedComponent = parser.Parse(),
-		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
+		resultContext = new ResultContext(sizeOption, diversityOption),
+		enumerator = parsedComponent.GetEnumerator(resultContext),
+		possibilities = [];
 	
-	console.log(possibilities);
+	console.log(enumerator);
+
+	const start = Date.now();
+	while(enumerator.GetNext()){
+		if(Date.now() - start > 2000)
+			break;
+		possibilities.push(enumerator.CurrentValue);
+	}
 
 	setResult(possibilities, regex.value, format);
 }

@@ -1,3 +1,7 @@
+
+import ResultContext from "../results/ResultContext.js";
+import Enumerator from "../results/Enumerator.js";
+
 /**
  * Base component SelectorBase
  * 
@@ -33,6 +37,16 @@ export default class SelectorBase {
 	 * @returns {Array<String>} The array
 	 */
 	GetSelection(size, diversity){
+		throw "Cannot call abstract method";
+	}
+
+	/**
+	 * gets the result enumerator
+	 * @param {ResultContext} resultContext the result context
+	 * @param {Number} fraction the result fraction
+	 * @returns {Enumerator}
+	 */
+	GetEnumerator(resultContext, fraction){
 		throw "Cannot call abstract method";
 	}
 }

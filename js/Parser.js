@@ -486,7 +486,6 @@ export default class Parser {
 			defaultComponent = new Group(),
 			result = new ParseResult(this._regex, defaultComponent);
 		ParseGroup(result);
-		console.log(result);
 		return result.Component;
 	}
 }

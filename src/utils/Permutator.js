@@ -1,6 +1,6 @@
 /// Imports
 
-import { Size } from '../../Enums.js';
+import { Size } from '../Enums.js';
 import { pick } from './Range.js';
 
 

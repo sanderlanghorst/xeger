@@ -197,8 +197,6 @@ function onFormSubmitted(event){
 		parsedComponent = parser.Parse(),
 		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
 	
-	console.log(possibilities);
-
 	setResult(possibilities, regex.value, format);
 }
 

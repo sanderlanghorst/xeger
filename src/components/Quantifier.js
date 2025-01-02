@@ -1,9 +1,9 @@
 /// Imports
 
 import SelectorBase from './SelectorBase.js';
-import {pick, range} from './utils/Range.js';
+import {pick, range} from '../utils/Range.js';
 import { Size, Diversity } from '../Enums.js';
-import permute from './utils/Permutator.js';
+import permute from '../utils/Permutator.js';
 
 /// Privates
 

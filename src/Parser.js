@@ -10,7 +10,7 @@ import Group from './components/Group.js';
 import SelectorBase from './components/SelectorBase.js';
 import Or from './components/Or.js';
 import Quantifier from './components/Quantifier.js';
-import { range } from './components/utils/Range.js';
+import { range } from './utils/Range.js';
 
 
 /// Private type
@@ -486,7 +486,6 @@ export default class Parser {
 			defaultComponent = new Group(),
 			result = new ParseResult(this._regex, defaultComponent);
 		ParseGroup(result);
-		console.log(result);
 		return result.Component;
 	}
 }

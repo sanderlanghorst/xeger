@@ -28,4 +28,4 @@ See detailed progress in this document:
 ### This project is just HTML and javascript (and a touch of css)
 So this whole project can be opened in github-pages:
 
-[Open github-pages](https://sanderlanghorst.github.io/xeger/)
+[Open github-pages](https://sanderlanghorst.github.io/xeger/src/app/index.html)

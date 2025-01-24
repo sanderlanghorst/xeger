@@ -1,9 +1,9 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
+import {SelectorBase} from './SelectorBase.js';
 import {pick, range} from '../utils/Range.js';
 import { Size, Diversity } from '../Enums.js';
-import permute from '../utils/Permutator.js';
+import {permute} from '../utils/Permutator.js';
 
 /// Privates
 
@@ -22,7 +22,7 @@ const
 
 /// Class
 
-export default class Quantifier extends SelectorBase {
+export class Quantifier extends SelectorBase {
 	
 	/**
 	 * Instanciates a Quantifier selector
@@ -38,7 +38,7 @@ export default class Quantifier extends SelectorBase {
 		/** @type {Number} */
 		this._max = parseInt(max, 10);
 
-		/** @type {Array<SelectorBase>} */
+		/** @type {SelectorBase} */
 		this._component = null;
 	}
 
@@ -48,7 +48,15 @@ export default class Quantifier extends SelectorBase {
 	 * @inheritdoc
 	 */
 	get Components(){
-		return [_components];
+		return [this._component];
+	}
+	
+	get Min(){
+		return this._min;
+	}
+	
+	get Max(){
+		return this._max;
 	}
 
 	/// Methods
@@ -98,3 +106,5 @@ export default class Quantifier extends SelectorBase {
 		this._max = Math.min(this._min + 1, this._max);
 	}
 }
+
+export const Max = 100;

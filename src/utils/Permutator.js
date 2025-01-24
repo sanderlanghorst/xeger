@@ -24,7 +24,7 @@ const sizes = {
  * @param {Symbol} size the size of the result
  * @returns {Array<String>}
  */
-export default function permute(list, size) {
+export function permute(list, size) {
 	const workingList = list.map(l => l.filter(i => i !== undefined || i !== '')).filter(l => l.length > 0);
 	if(!workingList.length){
 		return [];

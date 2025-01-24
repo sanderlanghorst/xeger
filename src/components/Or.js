@@ -1,12 +1,12 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
+import {SelectorBase} from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
 
 
 /// Class
 
-export default class Or extends SelectorBase {
+export class Or extends SelectorBase {
 	
 	constructor(){
 		super();

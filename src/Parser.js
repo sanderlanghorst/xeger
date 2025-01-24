@@ -5,11 +5,11 @@
 /// Imports
 
 
-import CharacterSet from './components/CharacterSet.js';
-import Group from './components/Group.js';
-import SelectorBase from './components/SelectorBase.js';
-import Or from './components/Or.js';
-import Quantifier from './components/Quantifier.js';
+import {CharacterSet, Min as CharacterSetMin, Max as CharacterSetMax} from './components/CharacterSet.js';
+import {Group} from './components/Group.js';
+import {SelectorBase} from './components/SelectorBase.js';
+import {Or} from './components/Or.js';
+import {Quantifier, Max as QuantifierMax} from './components/Quantifier.js';
 import { range } from './utils/Range.js';
 
 
@@ -214,15 +214,15 @@ function ParseGroup(result) {
 			}
 
 			case '.':
-				result.AddComponent(CharacterSet.FromRange(0, 1279));
+				result.AddComponent(CharacterSet.FromRange(CharacterSetMin, CharacterSetMax));
 				break;
 
 			case '*': 
-				ParseQuantifier(result, 0, 100);
+				ParseQuantifier(result, 0, QuantifierMax);
 				break;
 			
 			case '+':
-				ParseQuantifier(result, 1, 100);
+				ParseQuantifier(result, 1, QuantifierMax);
 				break;
 
 			case '?':
@@ -468,23 +468,22 @@ function ParseQuantifierLazy(result, quantifier) {
 
 /// Class definition
 
-export default class Parser {
+export class Parser {
 	/**
 	 * Instanciates the regex parser
-	 * @param {String} regex the regex string
 	 */
-	constructor(regex){
-		this._regex = regex;
+	constructor(){
 	}
 
 	/**
 	 * Parses the regex
+	 * @param {String} regex the regex string
 	 * @returns {Group} The parsed component
 	 */
-	Parse(){
+	Parse(regex){
 		const 
 			defaultComponent = new Group(),
-			result = new ParseResult(this._regex, defaultComponent);
+			result = new ParseResult(regex, defaultComponent);
 		ParseGroup(result);
 		return result.Component;
 	}

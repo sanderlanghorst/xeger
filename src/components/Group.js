@@ -1,14 +1,14 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
-import permute from '../utils/Permutator.js';
+import {SelectorBase} from './SelectorBase.js';
+import {permute} from '../utils/Permutator.js';
 
 /// Private methods
 
 
 /// Class
 
-export default class Group extends SelectorBase {
+export class Group extends SelectorBase {
 	
 	constructor(){
 		super();
@@ -30,7 +30,7 @@ export default class Group extends SelectorBase {
 	}
 
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	get Components() {
 		return this._components;

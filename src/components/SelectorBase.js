@@ -4,7 +4,7 @@
  * @typedef {Object} SelectorBase
  */
 
-export default class SelectorBase {
+export class SelectorBase {
 	
 	/// Properties
 

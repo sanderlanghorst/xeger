@@ -1,6 +1,6 @@
 /// Imports
 
-import SelectorBase from './SelectorBase.js';
+import {SelectorBase} from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
 import { range, rangeChars } from '../utils/Range.js';
 import { pick } from '../utils/Range.js';
@@ -31,7 +31,7 @@ const
 
 /// Class
 
-export default class CharacterSet extends SelectorBase {
+export class CharacterSet extends SelectorBase {
 
 	/**
 	 * a characterset with a defined set
@@ -127,7 +127,10 @@ export default class CharacterSet extends SelectorBase {
 	 * @param {Number} to charcode
 	 */
 	static FromRange(from, to){
-		return new CharacterSet(range(from, to-from));
+		return new CharacterSet(range(from, to-from+1));
 	}
 
 }
+
+export const Min = 0;
+export const Max = 1279;

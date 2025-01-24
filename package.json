@@ -1,0 +1,17 @@
+{
+    "name": "xeger-tests",
+    "version": "1.0.0",
+    "description": "testing",
+    "main": "src/app/index.js",
+    "type": "module",
+    "scripts": {
+        "test": "mocha 'test/**/*.spec.js' --require @babel/register"
+    },
+    "author": "sander",
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/preset-env": "^7.26.0",
+        "@babel/register": "^7.25.9",
+        "mocha": "^11.0.1"
+    }
+}

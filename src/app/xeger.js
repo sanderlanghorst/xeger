@@ -5,7 +5,7 @@
 
 /// Imports
 
-import Parser from '../Parser.js';
+import {Parser} from '../Parser.js';
 import {Size, Diversity} from '../Enums.js';
 import {GroupSequence} from '../utils/Enumerable.js';
 
@@ -193,8 +193,8 @@ function onFormSubmitted(event){
 		sizeOption = getSizeOption(),
 		diversityOption = getDiversityOption(),
 		format = ((checkbox) => checkbox ? checkbox.checked : false)(baseElement.querySelector(selectors.format)),
-		parser = new Parser(regex.value),
-		parsedComponent = parser.Parse(),
+		parser = new Parser(),
+		parsedComponent = parser.Parse(regex.value),
 		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
 	
 	setResult(possibilities, regex.value, format);

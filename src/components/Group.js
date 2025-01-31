@@ -59,4 +59,8 @@ export class Group extends SelectorBase {
 			result = permute(selection, size);
 		return result;
 	}
+
+	Generate(context){
+		return this._components.map(c => c.Generate(context)).reduce((p,c,i) => `${p}${c}`, '');
+	}
 }

@@ -99,6 +99,15 @@ export class Quantifier extends SelectorBase {
 		return resultSets;
 	}
 
+	Generate(context){
+		const number = pick(range(this._min, this._max), 1)[0];
+		const resultSet = [];
+		for(let i=0; i < number; i++){
+			resultSet.push(this._component.Generate(context));
+		}
+		return resultSet.reduce((p,c,i) => `${p}${c}`, '');
+	}
+
 	/**
 	 * Makes the selector lazy
 	 */

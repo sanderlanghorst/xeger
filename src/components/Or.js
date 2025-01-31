@@ -2,6 +2,7 @@
 
 import {SelectorBase} from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
+import { pick } from '../utils/Range.js';
 
 
 /// Class
@@ -57,5 +58,25 @@ export class Or extends SelectorBase {
 		return [this._left.GetSelection(size, diversity),
 				this._right.GetSelection(size, diversity)]
 				.flatMap(m => m);
+	}
+
+	Generate(context){
+		const el = pick(this.Components, 1)[0];
+		return el.Generate(context);
+	}
+
+
+	/**
+	 * Generates an Or component with the given elements
+	 * @param {SelectorBase} a the first component
+	 * @param {SelectorBase} b the second component
+	 * @returns {Or}
+	 */
+	static With(a, b) {
+		if(!a || !b) throw "Arguments should have a component";
+		const or = new Or();
+		or.AddComponent(a);
+		or.AddComponent(b);
+		return or;
 	}
 }

@@ -4,24 +4,25 @@ import {SelectorBase} from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
 import { range, rangeChars } from '../utils/Range.js';
 import { pick } from '../utils/Range.js';
+import { GenerationContext } from './GenerationContext.js';
 
-const
+export const
 	diversitySets = {
 		[Diversity.Simple]:range(65, 26).concat(range(97, 26)), //65 'A'
 		[Diversity.Random]:range(32, 95),
 		[Diversity.Insane]:[]
-	},
+	};
 	
-	predefinedSets = {
+const predefinedSets = {
 		digits: rangeChars('0', '9'),
 		whitespaces: [9, 10, 12, 13, 32],
 		word: rangeChars('A', 'Z')
 				.concat(rangeChars('a','z'))
 				.concat(rangeChars('0','9'))
 				.concat(['_'.charCodeAt(0)]),
-	},
+	};
 
-	sizes = {
+const sizes = {
 		[Size.Small]: 3,
 		[Size.Medium]: 6,
 		[Size.Large]: 12,
@@ -74,6 +75,17 @@ export class CharacterSet extends SelectorBase {
 		
 		return pick(result, sizes[size])
 					.map(r => String.fromCharCode(r));
+	}
+
+	/**
+	 * Generates character output
+	 * @param {GenerationContext} context the context
+	 */
+	Generate(context){
+		const 
+			preSet = diversitySets[context.Diversity],
+			filtered = this._set.filter(char => preSet.some(r => r === char))
+		return String.fromCharCode(pick(filtered, 1)[0]);
 	}
 
 	/// Static Properties

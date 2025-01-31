@@ -4,6 +4,8 @@
  * @typedef {Object} SelectorBase
  */
 
+import {GenerationContext} from "./GenerationContext.js";
+
 export class SelectorBase {
 	
 	/// Properties
@@ -33,6 +35,14 @@ export class SelectorBase {
 	 * @returns {Array<String>} The array
 	 */
 	GetSelection(size, diversity){
+		throw "Cannot call abstract method";
+	}
+
+	/**
+	 * generates the next output
+	 * @param {GenerationContext} context the context
+	 */
+	Generate(context){
 		throw "Cannot call abstract method";
 	}
 }

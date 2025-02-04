@@ -15,11 +15,9 @@ Global progress:
 	- [x] non-printables
 	- [ ] look-around
 	- [ ] references
-- [ ] implement unit testing
+- [x] implement unit testing
+- [x] implement npm packaging
 - [ ] convert to usable module
-- [ ] use background worker to prevent ui freeze
-- [ ] load results as they get calculated
-- [ ] implement npm packaging
 
 See detailed progress in this document:
 

@@ -2,7 +2,7 @@ import assert from 'assert'
 
 import { Quantifier } from '../src/components/Quantifier.js';
 import { CharacterSet } from '../src/components/CharacterSet.js';
-import { GenerationContext } from '../src/components/GenerationContext.js';
+import { GenerationContext } from '../src/GenerationContext.js';
 import { Diversity, Size } from '../src/Enums.js';
 
 describe('when generating with a Quantifier component', () => {
@@ -16,7 +16,7 @@ describe('when generating with a Quantifier component', () => {
 
         while(--tries > 0){
             var result = q.Generate(context);
-            assert(result.length == 0);
+            assert.equal(result, '');
         }
         
     });
@@ -53,6 +53,41 @@ describe('when generating with a Quantifier component', () => {
             assert(result.length >= min);
             assert(result.length <= max);
             assert(result.indexOf('a') >= 0);
+        }
+        
+    });
+
+    it('a result is returned with the length of exactly', () => {
+        const min = 15;
+        const max = 15;
+        const a = CharacterSet.FromCharacter('a');
+        const q = new Quantifier(min, max);
+        q.AddComponent(a);
+        const context = new GenerationContext(Size.Small, Diversity.Simple);
+
+        let tries = 20;
+
+        while(--tries > 0) {
+            var result = q.Generate(context);
+            assert.equal(result.length, max);
+            assert(result.indexOf('a') >= 0);
+        }
+        
+    });
+
+    it('a result with length of 10 is expected when using Size.Small', () => {
+        const min = 1;
+        const max = 100;
+        const a = CharacterSet.FromCharacter('a');
+        const q = new Quantifier(min, max);
+        q.AddComponent(a);
+        const context = new GenerationContext(Size.Small, Diversity.Simple);
+
+        let tries = 20;
+
+        while(--tries > 0) {
+            var result = q.Generate(context);
+            assert(result.length <= 10)
         }
         
     });

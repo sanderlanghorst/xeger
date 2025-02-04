@@ -1,4 +1,4 @@
-import { Size, Diversity } from '../Enums.js';
+import { Size, Diversity } from './Enums.js';
 
 export class GenerationContext {
 

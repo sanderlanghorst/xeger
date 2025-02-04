@@ -8,6 +8,8 @@
 import {Parser} from '../Parser.js';
 import {Size, Diversity} from '../Enums.js';
 import {GroupSequence} from '../utils/Enumerable.js';
+import { GenerationContext } from '../GenerationContext.js';
+import { Generator } from '../Generator.js';
 
 
 /// Constants
@@ -195,7 +197,8 @@ function onFormSubmitted(event){
 		format = ((checkbox) => checkbox ? checkbox.checked : false)(baseElement.querySelector(selectors.format)),
 		parser = new Parser(),
 		parsedComponent = parser.Parse(regex.value),
-		possibilities = parsedComponent.GetSelection(sizeOption, diversityOption);
+		generator = new Generator(sizeOption, diversityOption),
+		possibilities = generator.Generate(parsedComponent);
 	
 	setResult(possibilities, regex.value, format);
 }

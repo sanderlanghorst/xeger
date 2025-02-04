@@ -6,6 +6,7 @@ import { Size, Diversity } from '../Enums.js';
 import {permute} from '../utils/Permutator.js';
 
 /// Privates
+export const Max = 100;
 
 const
 	diversityNumbers = {
@@ -14,10 +15,10 @@ const
 		[Diversity.Insane] : 20
 	},
 	sizeNumbers = {
-		[Size.Small]: 0.1,
-		[Size.Medium]: 0.5,
-		[Size.Large]: 0.8,
-		[Size.Insane]: 1
+		[Size.Small]: 4,
+		[Size.Medium]: 10,
+		[Size.Large]: 20,
+		[Size.Insane]: Max
 	}
 
 /// Class
@@ -100,7 +101,10 @@ export class Quantifier extends SelectorBase {
 	}
 
 	Generate(context){
-		const number = pick(range(this._min, this._max), 1)[0];
+		const maxNumber = sizeNumbers[context.Size];
+		const min = Math.max(this._min, 0);
+		const max = Math.max(min, Math.min(this._max, maxNumber));
+		const number = pick(range(min, max - min + 1), 1)[0];
 		const resultSet = [];
 		for(let i=0; i < number; i++){
 			resultSet.push(this._component.Generate(context));
@@ -115,5 +119,3 @@ export class Quantifier extends SelectorBase {
 		this._max = Math.min(this._min + 1, this._max);
 	}
 }
-
-export const Max = 100;

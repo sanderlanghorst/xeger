@@ -4,7 +4,7 @@
  * @typedef {Object} SelectorBase
  */
 
-import {GenerationContext} from "./GenerationContext.js";
+import {GenerationContext} from "../GenerationContext.js";
 
 export class SelectorBase {
 	

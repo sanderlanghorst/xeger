@@ -2,7 +2,7 @@ import assert from 'assert'
 
 import { Group } from '../src/components/Group.js';
 import { CharacterSet } from '../src/components/CharacterSet.js';
-import { GenerationContext } from '../src/components/GenerationContext.js';
+import { GenerationContext } from '../src/GenerationContext.js';
 import { Diversity, Size } from '../src/Enums.js';
 
 describe('when generating with an Group component', () => {

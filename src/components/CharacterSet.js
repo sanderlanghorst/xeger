@@ -4,7 +4,7 @@ import {SelectorBase} from './SelectorBase.js';
 import { Size, Diversity } from '../Enums.js';
 import { range, rangeChars } from '../utils/Range.js';
 import { pick } from '../utils/Range.js';
-import { GenerationContext } from './GenerationContext.js';
+import { GenerationContext } from '../GenerationContext.js';
 
 export const
 	diversitySets = {
@@ -85,7 +85,7 @@ export class CharacterSet extends SelectorBase {
 		const 
 			preSet = diversitySets[context.Diversity],
 			filtered = this._set.filter(char => preSet.some(r => r === char))
-		return String.fromCharCode(pick(filtered, 1)[0]);
+		return String.fromCharCode(pick(filtered.length ? filtered : this._set, 1)[0]);
 	}
 
 	/// Static Properties

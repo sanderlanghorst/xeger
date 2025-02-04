@@ -1,5 +1,5 @@
 import { CharacterSet, diversitySets, Min as CharacterSetMin, Max as CharacterSetMax } from "../src/components/CharacterSet.js";
-import { GenerationContext } from "../src/components/GenerationContext.js";
+import { GenerationContext } from "../src/GenerationContext.js";
 import { Size, Diversity } from '../src/Enums.js';
 
 import assert from 'assert'
@@ -15,6 +15,18 @@ describe('when generating a characterset', () => {
         result = characterSet.Generate(context);
         assert.equal(result, 'a');
     });
+
+    it('the character should generate "a"', () => MatchCharacter('a'));
+    it('the character should generate "@"', () => MatchCharacter('@'));
+    it('the character should generate "1"', () => MatchCharacter('1'));
+    it('the character should generate "["', () => MatchCharacter('['));
+
+    function MatchCharacter(char){
+        const characterSet = CharacterSet.FromCharacter(char);
+        const context = new GenerationContext(Size.Small, Diversity.Simple);
+        var result = characterSet.Generate(context);
+        assert.equal(result, char);
+    }
 
     it('a list of three characters should randomly return those characters', () => {
         const characters = ['a', 'b', '1'];
